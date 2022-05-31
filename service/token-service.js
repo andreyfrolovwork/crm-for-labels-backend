@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const tokenModel = require("../models/token-model");
 const mysql = require("./../models/database.js");
 const ApiError = require("../exceptions/api-error.js");
 

@@ -1,7 +1,5 @@
-const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const mailService = require("./mail-service");
 const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
@@ -53,20 +51,11 @@ class UserService {
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
     const user = await createUser(mysql, email, hashPassword);
 
-    const userDto = new UserDto(user); // id, email, isActivated
+    const userDto = new UserDto(user); // id, email
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id_user, tokens.refreshToken);
 
     return { ...tokens, user: userDto };
-  }
-
-  async activate(activationLink) {
-    const user = await UserModel.findOne({ activationLink });
-    if (!user) {
-      throw ApiError.BadRequest("Неккоректная ссылка активации");
-    }
-    user.isActivated = true;
-    await user.save();
   }
 
   async login(email, password) {
@@ -134,17 +123,6 @@ class UserService {
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
-
-    /*const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (!userData || !tokenFromDb) {
-          throw ApiError.UnauthorizedError();
-        }
-        const user = await UserModel.findById(userData.id);
-        const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({ ...userDto });
-    
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
-        return { ...tokens, user: userDto };*/
   }
 
   async getAllUsers() {
@@ -152,8 +130,6 @@ class UserService {
     select * from users
     `);
     return users[0];
-    /*  const users = await UserModel.find();
-    return users;*/
   }
 }
 
