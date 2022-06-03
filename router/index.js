@@ -5,7 +5,7 @@ const { body } = require("express-validator");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 router.post(
-  "/regnewuser",
+  "/signin",
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
   userController.registration
