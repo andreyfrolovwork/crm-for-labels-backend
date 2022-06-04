@@ -1,12 +1,12 @@
-const mysql = require("./../models/database.js");
+const sql = require("./../models/database.js");
 
 async function getArtists(req, res, next) {
   try {
-    const users = await mysql.execute(`
+    const users = await sql`
         select * from artists
-        `);
+        `;
 
-    res.json(users[0]);
+    res.json(users);
   } catch (e) {
     console.log(e);
     next(e);

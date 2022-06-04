@@ -3,21 +3,21 @@ const uuid = require("uuid");
 const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
-const mysql = require("./../models/database.js");
+const sql = require("./../models/database.js");
 
-async function userExistCheck(mysql, email) {
+async function userExistCheck(sql, email) {
   let candidate;
   try {
-    candidate = await mysql.execute(`
+    candidate = await sql`
             select id_user, email
             from users
-            where email = '${email}'
-        `);
+            where email = ${email}
+        `;
   } catch (e) {
     ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
   }
 
-  if (candidate[0].length === 0) {
+  if (candidate.length === 0) {
     return false;
   } else {
     throw ApiError.BadRequest(
@@ -27,26 +27,28 @@ async function userExistCheck(mysql, email) {
   }
 }
 
-async function createUser(mysql, email, hashPassword) {
+async function createUser(sql, email, hashPassword) {
   try {
-    res = await mysql.execute(`
-    insert users(email,password)
-    values ('${email}','${hashPassword}')
-    `);
-    const user = await mysql.execute(`
+    res = await sql`
+    insert into users(email,password, role)
+    values (${email},${hashPassword}, 'artist')
+    `;
+
+    const user = await sql`
             select id_user, email, role
             from users
-            where id_user = '${res[0].insertId}'
+            where email = ${email}
             limit 1
-        `);
-    const artist = await mysql.execute(`
-    insert artists (fk_id_user)
-    values (${user[0][0].id_user})
-    `);
+        `;
+    debugger;
+    const artist = await sql`
+    insert into artists (fk_id_user)
+    values (${user[0].id_user})
+    `;
     return {
-      id_user: user[0][0].id_user,
-      email: user[0][0].email,
-      role: user[0][0].role,
+      id_user: user[0].id_user,
+      email: user[0].email,
+      role: user[0].role,
     };
   } catch (e) {
     ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
@@ -55,10 +57,10 @@ async function createUser(mysql, email, hashPassword) {
 
 class UserService {
   async registration(email, password) {
-    await userExistCheck(mysql, email);
+    await userExistCheck(sql, email);
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
-    const user = await createUser(mysql, email, hashPassword);
+    const user = await createUser(sql, email, hashPassword);
     const userDto = new UserDto(user); // id, email
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id_user, tokens.refreshToken);
@@ -68,31 +70,28 @@ class UserService {
   async login(email, password) {
     let user_;
     try {
-      user_ = await mysql.execute(`
+      user_ = await sql`
                 select id_user, email, password, role
                 from users
-                where email = '${email}'
+                where email = ${email}
                 limit 1
-            `);
+            `;
     } catch (e) {
       ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
     }
 
-    if (user_[0].length === 0) {
+    if (user_.length === 0) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");
     }
-    const passswordCorrect = await bcrypt.compare(
-      password,
-      user_[0][0].password
-    );
+    const passswordCorrect = await bcrypt.compare(password, user_[0].password);
     if (!passswordCorrect) {
       throw ApiError.BadRequest("Неверный пароль");
     }
 
     const userDto_ = new UserDto({
-      email: user_[0][0].email,
-      id_user: user_[0][0].id_user,
-      role: user_[0][0].role,
+      email: user_[0].email,
+      id_user: user_[0].id_user,
+      role: user_[0].role,
     });
     const tokens_ = tokenService.generateTokens({ ...userDto_ });
     await tokenService.saveToken(userDto_.id_user, tokens_.refreshToken);
@@ -109,28 +108,28 @@ class UserService {
       throw ApiError.UnauthorizedError();
     }
     const userData = tokenService.validateRefreshToken(refreshToken);
-    const tokenFromDatabase = await mysql.execute(`
+    const tokenFromDatabase = await sql`
             select fk_user_id, refresh_token
             from tokens
-            where refresh_token = '${refreshToken}'
-        `);
+            where refresh_token = ${refreshToken}
+        `;
     if (!userData || !tokenFromDatabase) {
       throw ApiError.UnauthorizedError();
     }
     let user;
     try {
-      user = await mysql.execute(`
+      user = await sql`
                 select id_user, email
                 from users
                 where id_user = ${userData.id_user}
                 limit 1
-            `);
+            `;
     } catch (e) {
       ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
     }
-    const userDto = new UserDto(user[0][0]);
+    const userDto = new UserDto(user[0]);
     const tokens = tokenService.generateTokens({ ...userDto });
-    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    await tokenService.saveToken(userDto.id_user, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 }
