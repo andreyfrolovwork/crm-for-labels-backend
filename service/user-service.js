@@ -28,20 +28,29 @@ async function userExistCheck(mysql, email) {
 }
 
 async function createUser(mysql, email, hashPassword) {
-  let res;
   try {
     res = await mysql.execute(`
     insert users(email,password)
     values ('${email}','${hashPassword}')
     `);
+    const user = await mysql.execute(`
+            select id_user, email, role
+            from users
+            where id_user = '${res[0].insertId}'
+            limit 1
+        `);
+    const artist = await mysql.execute(`
+    insert artists (fk_id_user)
+    values (${user[0][0].id_user})
+    `);
+    return {
+      id_user: user[0][0].id_user,
+      email: user[0][0].email,
+      role: user[0][0].role,
+    };
   } catch (e) {
     ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
   }
-
-  return {
-    id_user: res[0].insertId,
-    email: email,
-  };
 }
 
 class UserService {
@@ -50,11 +59,9 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
     const user = await createUser(mysql, email, hashPassword);
-
     const userDto = new UserDto(user); // id, email
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id_user, tokens.refreshToken);
-
     return { ...tokens, user: userDto };
   }
 
@@ -62,7 +69,7 @@ class UserService {
     let user_;
     try {
       user_ = await mysql.execute(`
-                select id_user, email, password
+                select id_user, email, password, role
                 from users
                 where email = '${email}'
                 limit 1
@@ -81,9 +88,11 @@ class UserService {
     if (!passswordCorrect) {
       throw ApiError.BadRequest("Неверный пароль");
     }
+
     const userDto_ = new UserDto({
       email: user_[0][0].email,
       id_user: user_[0][0].id_user,
+      role: user_[0][0].role,
     });
     const tokens_ = tokenService.generateTokens({ ...userDto_ });
     await tokenService.saveToken(userDto_.id_user, tokens_.refreshToken);
@@ -123,13 +132,6 @@ class UserService {
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
-  }
-
-  async getAllUsers() {
-    const users = await mysql.execute(`
-    select * from users
-    `);
-    return users[0];
   }
 }
 
