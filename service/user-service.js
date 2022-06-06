@@ -3,7 +3,7 @@ const uuid = require("uuid");
 const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
-const sql = require("./../models/database.js");
+const sql = require("./../models/postgres.js");
 
 async function userExistCheck(sql, email) {
   let candidate;
@@ -40,7 +40,6 @@ async function createUser(sql, email, hashPassword) {
             where email = ${email}
             limit 1
         `;
-    debugger;
     const artist = await sql`
     insert into artists (fk_id_user)
     values (${user[0].id_user})

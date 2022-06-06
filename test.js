@@ -71,9 +71,12 @@
 })();*/
 
 (async () => {
-  /*const sql = require("./models/postgres.js");
+  /* const sql = require("./models/postgres.js");*/
+  const initDb = require("./models/postgres.js");
+  const sql = await initDb();
+
   let res = await sql`select * from users`;
-  console.log(res);*/
+  console.log(res); /*
 
   setTimeout(() => {
     console.log("inside settimeout1");
@@ -82,5 +85,5 @@
   setTimeout(() => {
     console.log("inside settimeout2");
   }, 0);
-  console.log("outside");
+  console.log("outside");*/
 })();

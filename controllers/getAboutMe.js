@@ -1,4 +1,4 @@
-const sql = require("../models/database.js");
+const sql = require("../models/postgres.js");
 const ApiError = require("../exceptions/api-error.js");
 
 async function getAboutMe(req, res, next) {
@@ -11,6 +11,5 @@ async function getAboutMe(req, res, next) {
     ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
     next(e);
   }
-  debugger;
 }
 module.exports = getAboutMe;

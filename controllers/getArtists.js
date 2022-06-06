@@ -1,4 +1,4 @@
-const sql = require("./../models/database.js");
+const sql = require("./../models/postgres.js");
 
 async function getArtists(req, res, next) {
   try {
