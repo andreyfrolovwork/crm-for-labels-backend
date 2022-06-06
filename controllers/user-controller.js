@@ -2,7 +2,7 @@ const userService = require("../service/user-service");
 const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/api-error");
 
-class UserController {
+class UserClass {
   async registration(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -82,4 +82,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController();
+module.exports = new UserClass();

@@ -69,3 +69,18 @@
     console.log(e);
   }
 })();*/
+
+(async () => {
+  /*const sql = require("./models/postgres.js");
+  let res = await sql`select * from users`;
+  console.log(res);*/
+
+  setTimeout(() => {
+    console.log("inside settimeout1");
+  }, 0);
+
+  setTimeout(() => {
+    console.log("inside settimeout2");
+  }, 0);
+  console.log("outside");
+})();
