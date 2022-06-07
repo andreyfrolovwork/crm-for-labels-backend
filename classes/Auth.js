@@ -1,15 +1,26 @@
 const userService = require("../service/UserService.js");
-const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/ApiError.js");
+const { isEmail, isStrongPassword } = require("validator");
 
 class Auth {
   async registration(req, res, next) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return next(
-          ApiError.BadRequest("Ошибка при валидации", errors.array())
-        );
+      if (!isEmail(req.body.email)) {
+        return next(ApiError.BadRequest("Ошибка при валидации email"));
+      }
+      if (
+        !isStrongPassword(req.body.password, {
+          minLength: 8,
+          minLowercase: 0,
+          minUppercase: 0,
+          minNumbers: 0,
+          minSymbols: 0,
+          returnScore: false,
+          pointsPerUnique: 0,
+          pointsPerRepeat: 0,
+        })
+      ) {
+        return next(ApiError.BadRequest("Ошибка при валидации password"));
       }
       const { email, password } = req.body;
       const userData = await userService.registration(email, password);
