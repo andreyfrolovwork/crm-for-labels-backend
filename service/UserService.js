@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const tokenService = require("./token-service");
-const UserDto = require("../dtos/user-dto");
-const ApiError = require("../exceptions/api-error");
+const tokenService = require("./TokenService.js");
+const UserDto = require("../dtos/UserDto.js");
+const ApiError = require("../exceptions/ApiError.js");
 const sql = require("./../models/postgres.js");
 
 async function userExistCheck(sql, email) {

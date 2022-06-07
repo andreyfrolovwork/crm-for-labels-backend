@@ -1,8 +1,8 @@
-const userService = require("../service/user-service");
+const userService = require("../service/UserService.js");
 const { validationResult } = require("express-validator");
-const ApiError = require("../exceptions/api-error");
+const ApiError = require("../exceptions/ApiError.js");
 
-class UserClass {
+class Auth {
   async registration(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -82,4 +82,4 @@ class UserClass {
   }
 }
 
-module.exports = new UserClass();
+module.exports = new Auth();

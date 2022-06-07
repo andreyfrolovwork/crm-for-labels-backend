@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const router = require("./router/index");
-const errorMiddleware = require("./middlewares/error-middleware");
+const errorMiddleware = require("./middlewares/ErrorMiddleware.js");
 const sql = require("./models/postgres.js");
 
 const PORT = process.env.APP_PORT;

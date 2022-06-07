@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const sql = require("./../models/postgres.js");
-const ApiError = require("../exceptions/api-error.js");
+const ApiError = require("../exceptions/ApiError.js");
 
 class TokenService {
   generateTokens(payload) {
