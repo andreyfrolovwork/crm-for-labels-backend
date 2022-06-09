@@ -118,7 +118,7 @@ class UserService {
     let user;
     try {
       user = await sql`
-                select id_user, email
+                select id_user, email, role
                 from users
                 where id_user = ${userData.id_user}
                 limit 1

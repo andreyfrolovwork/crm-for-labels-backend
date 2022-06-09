@@ -70,13 +70,13 @@
   }
 })();*/
 
-(async () => {
-  /* const sql = require("./models/postgres.js");*/
+/*(async () => {
+  /!* const sql = require("./models/postgres.js");*!/
   const initDb = require("./models/postgres.js");
   const sql = await initDb();
 
   let res = await sql`select * from users`;
-  console.log(res); /*
+  console.log(res); /!*
 
   setTimeout(() => {
     console.log("inside settimeout1");
@@ -85,5 +85,90 @@
   setTimeout(() => {
     console.log("inside settimeout2");
   }, 0);
-  console.log("outside");*/
+  console.log("outside");*!/
+})();*/
+/*
+(async () => {
+  class Main {
+    static async anotheMethod() {
+      console.log("another");
+    }
+
+    static async checkthis() {
+      console.log("checkthis");
+      await this.anotheMethod();
+    }
+  }
+
+  /!*const main = new Main();*!/
+
+  /!*  Main.checkthis();*!/
+  const ApiError = require("./exceptions/ApiError.js");
+  const tokenService = require("./service/TokenService.js");
+  class AuthMiddleware {
+    static async check(req, res, next) {
+      try {
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader) {
+          return next(ApiError.UnauthorizedError());
+        }
+
+        const accessToken = authorizationHeader.split(" ")[1];
+        if (!accessToken) {
+          return next(ApiError.UnauthorizedError());
+        }
+
+        const userData = tokenService.validateAccessToken(accessToken);
+
+        if (!userData) {
+          return next(ApiError.UnauthorizedError());
+        }
+
+        req.user = userData;
+        return userData;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    static async checkArtist(req, res, next) {
+      const userData = await this.check(req, res, next);
+      if (userData) {
+        next();
+      } else {
+        next(ApiError.UnauthorizedError());
+      }
+    }
+
+    static async checkAdmin(req, res, next) {
+      const userData = await this.check(req, res, next);
+      if (userData.role !== "admin") {
+        return next(ApiError.NotEnoughRightsError());
+      } else if (!userData) {
+        next(ApiError.UnauthorizedError());
+      } else {
+        next();
+      }
+    }
+  }
+  /!*AuthMiddleware.checkAdmin();*!/
+
+
+})();
+*/
+(async () => {
+  class People {
+    static sayHello() {
+      console.log("Hello!");
+    }
+    static sayHi() {
+      this.sayHello();
+    }
+  }
+  People.sayHi(); // hello
+
+  const peopleHi = People.sayHi.bind(People);
+  /*  peopleHi(); //error*/
+
+  peopleHi();
 })();
