@@ -16,9 +16,9 @@ class AuthMiddleware {
 
       const userData = tokenService.validateAccessToken(accessToken);
 
-      if (!userData) {
+      /*      if (!userData) {
         return next(ApiError.UnauthorizedError());
-      }
+      }*/
 
       req.user = userData;
       return userData;
@@ -29,7 +29,7 @@ class AuthMiddleware {
 
   static async checkArtistRole(req, res, next) {
     const userData = await this.#check(req, res, next);
-    if (userData.role !== "artist") {
+    if (userData && userData.role !== "artist") {
       return next(ApiError.NotEnoughRightsError());
     } else if (!userData) {
       next(ApiError.UnauthorizedError());
@@ -40,7 +40,7 @@ class AuthMiddleware {
 
   static async checkAdminRole(req, res, next) {
     const userData = await this.#check(req, res, next);
-    if (userData.role !== "admin") {
+    if (userData && userData.role !== "admin") {
       return next(ApiError.NotEnoughRightsError());
     } else if (!userData) {
       next(ApiError.UnauthorizedError());

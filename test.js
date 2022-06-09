@@ -156,7 +156,7 @@
 
 })();
 */
-(async () => {
+/*(async () => {
   class People {
     static sayHello() {
       console.log("Hello!");
@@ -168,7 +168,13 @@
   People.sayHi(); // hello
 
   const peopleHi = People.sayHi.bind(People);
-  /*  peopleHi(); //error*/
+  /!*  peopleHi(); //error*!/
 
   peopleHi();
+})();*/
+(async () => {
+  const sql = require("./models/postgres.js");
+  const user = {
+    contract_agreement: "",
+  };
 })();
