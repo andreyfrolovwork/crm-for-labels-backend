@@ -27,12 +27,19 @@ async function userExistCheck(sql, email) {
   }
 }
 
-async function createUser(sql, email, hashPassword) {
+function getRole(isArtist) {
+  if (isArtist) {
+    return "artist";
+  }
+  return "admin_not_activated";
+}
+
+async function createUser(sql, email, hashPassword, isArtist) {
   try {
     res = await sql`
-    insert into users(email,password, role)
-    values (${email},${hashPassword}, 'artist')
-    `;
+            insert into users(email, password, role)
+            values (${email}, ${hashPassword}, ${getRole(isArtist)})
+        `;
 
     const user = await sql`
             select id_user, email, role
@@ -40,10 +47,13 @@ async function createUser(sql, email, hashPassword) {
             where email = ${email}
             limit 1
         `;
-    const artist = await sql`
-    insert into artists (fk_id_user)
-    values (${user[0].id_user})
-    `;
+
+    if (isArtist) {
+      const artist = await sql`
+                insert into artists (fk_id_user)
+                values (${user[0].id_user})
+            `;
+    }
     return {
       id_user: user[0].id_user,
       email: user[0].email,
@@ -55,11 +65,11 @@ async function createUser(sql, email, hashPassword) {
 }
 
 class UserService {
-  async registration(email, password) {
+  async registration(email, password, isArtist) {
     await userExistCheck(sql, email);
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
-    const user = await createUser(sql, email, hashPassword);
+    const user = await createUser(sql, email, hashPassword, isArtist);
     const userDto = new UserDto(user); // id, email
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id_user, tokens.refreshToken);

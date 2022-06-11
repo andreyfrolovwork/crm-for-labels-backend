@@ -10,4 +10,7 @@ adminRouter.post("/post-artist", checkAdminRole, Admin.getArtists);
 adminRouter.put("/put-artist", checkAdminRole, Admin.putArtist);
 adminRouter.delete("/delete-artist", checkAdminRole, Admin.getArtists);
 
+adminRouter.get("/get-users", checkAdminRole, Admin.getUsers);
+adminRouter.put("/put-user", checkAdminRole, Admin.putUser);
+
 module.exports = adminRouter;

@@ -172,9 +172,24 @@
 
   peopleHi();
 })();*/
+
 (async () => {
   const sql = require("./models/postgres.js");
   const user = {
-    contract_agreement: "",
+    id_user: 5,
+    email: "123@mail.ru",
+    created_at: "2022-06-03",
+    deleted: JSON.parse("false"),
+    role: "admin",
   };
+  try {
+    let res = await sql`
+                update users
+                set ${sql(user, "email", "created_at", "deleted", "role")}
+                where id_user = ${user.id_user}`;
+    debugger;
+  } catch (e) {
+    console.log(e);
+    debugger;
+  }
 })();

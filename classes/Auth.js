@@ -22,8 +22,12 @@ class Auth {
       ) {
         return next(ApiError.BadRequest("Ошибка при валидации password"));
       }
-      const { email, password } = req.body;
-      const userData = await userService.registration(email, password);
+      const { email, password, isArtist } = req.body;
+      const userData = await userService.registration(
+        email,
+        password,
+        isArtist
+      );
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
