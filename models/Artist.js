@@ -1,4 +1,5 @@
 const sql = require("../libs/postgres.js");
+const ApiError = require("./../exceptions/ApiError.js");
 
 class Artist {
   constructor(artist) {
@@ -37,6 +38,7 @@ class Artist {
       this.deleted = undefined;
     }
   }
+
   #getObj() {
     return {
       id_artist_contract: this.id_artist_contract,
@@ -84,7 +86,7 @@ class Artist {
 
   #getPropArray() {
     let artist;
-    artist = this.#getObj();
+    artist = this.#getObjWithoutId();
     let props = [];
     for (let prop in artist) {
       if (artist[prop] !== undefined) {
@@ -93,67 +95,113 @@ class Artist {
     }
     return props;
   }
-  async create() {
-    const returningProps = Object.keys(this.#getObj());
-    const artist = this.#getObj();
-    const propArr = this.#getPropArray();
 
-    return sql`insert into artists ${sql(artist, ...propArr)} returning ${sql(
-      returningProps
-    )}`;
+  async create() {
+    try {
+      const returningProps = Object.keys(this.#getObj());
+      const artist = this.#getObj();
+      const propArr = this.#getPropArray();
+
+      const insertArtist = await sql`insert into artists ${sql(
+        artist,
+        ...propArr
+      )} returning ${sql(returningProps)}`;
+      return insertArtist;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
+
   async save() {
-    const artist = this.#getObjWithoutId();
-    const propArr = this.#getPropArray();
-    return sql`update artists
-                   set ${sql(artist, ...propArr)}
-                   where id_artist_contract = ${this.id_artist_contract}`;
+    try {
+      const artist = this.#getObjWithoutId();
+      const propArr = this.#getPropArray();
+      const returningProps = Object.keys(this.#getObj());
+      const save = await sql`update artists
+                                   set ${sql(artist, ...propArr)}
+                                   where id_artist_contract = ${
+                                     this.id_artist_contract
+                                   } returning ${sql(returningProps)}`;
+      if (save.count !== 1) {
+        throw ApiError.DatabaseError("Не сохранилось в базе данных...");
+      }
+      return save;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
+  }
+
+  static async getAboutMe(id_user) {
+    try {
+      const artistData = await sql`
+                select *
+                from artists
+                where fk_id_user = ${id_user}
+                limit 1`;
+      if (artistData.length !== 1) {
+        throw ApiError.DatabaseError("Search result = nothing");
+      }
+      return artistData[0];
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
   static async findOneById(id) {
-    return sql`select id_artist_contract,
-                          fk_id_user,
-                          creative_pseudonym,
-                          name_2,
-                          name_1,
-                          name_3,
-                          document,
-                          address,
-                          email,
-                          inn,
-                          snils,
-                          bank_details,
-                          contract_number,
-                          contract_agreement,
-                          contract_fee,
-                          contract_fee_in_words,
-                          contract_expiration_date,
-                          deleted
-                   from artists
-                   where id_artist_contract = ${id}
-                   limit 1`;
+    try {
+      const user = await sql`select id_artist_contract,
+                                          fk_id_user,
+                                          creative_pseudonym,
+                                          name_2,
+                                          name_1,
+                                          name_3,
+                                          document,
+                                          address,
+                                          email,
+                                          inn,
+                                          snils,
+                                          bank_details,
+                                          contract_number,
+                                          contract_agreement,
+                                          contract_fee,
+                                          contract_fee_in_words,
+                                          contract_expiration_date,
+                                          deleted
+                                   from artists
+                                   where id_artist_contract = ${id}
+                                   limit 1`;
+      return user;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
-  static async getAll() {
-    return sql`select id_artist_contract,
-                          fk_id_user,
-                          creative_pseudonym,
-                          name_2,
-                          name_1,
-                          name_3,
-                          document,
-                          address,
-                          email,
-                          inn,
-                          snils,
-                          bank_details,
-                          contract_number,
-                          contract_agreement,
-                          contract_fee,
-                          contract_fee_in_words,
-                          contract_expiration_date,
-                          deleted
-                   from artists`;
+  static async getAll(next) {
+    try {
+      const users = await sql`select id_artist_contract,
+                                           fk_id_user,
+                                           creative_pseudonym,
+                                           name_2,
+                                           name_1,
+                                           name_3,
+                                           document,
+                                           address,
+                                           email,
+                                           inn,
+                                           snils,
+                                           bank_details,
+                                           contract_number,
+                                           contract_agreement,
+                                           contract_fee,
+                                           contract_fee_in_words,
+                                           contract_expiration_date,
+                                           deleted
+                                    from artists`;
+      return users;
+    } catch (e) {
+      next(e);
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 }
 

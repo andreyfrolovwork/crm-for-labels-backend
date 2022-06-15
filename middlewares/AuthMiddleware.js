@@ -16,10 +16,6 @@ class AuthMiddleware {
 
       const userData = tokenService.validateAccessToken(accessToken);
 
-      /*      if (!userData) {
-        return next(ApiError.UnauthorizedError());
-      }*/
-
       req.user = userData;
       return userData;
     } catch (e) {

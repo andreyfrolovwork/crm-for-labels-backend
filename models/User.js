@@ -1,4 +1,6 @@
 const sql = require("../libs/postgres.js");
+const ApiError = require("../exceptions/ApiError.js");
+const _ = require("lodash");
 
 class User {
   constructor(user) {
@@ -21,6 +23,7 @@ class User {
       this.deleted = undefined;
     }
   }
+
   #getObj() {
     return {
       id_user: this.id_user,
@@ -31,6 +34,7 @@ class User {
       role: this.role,
     };
   }
+
   #getObjWithoutId() {
     return {
       email: this.email,
@@ -55,54 +59,86 @@ class User {
   }
 
   async create() {
-    const returningProps = Object.keys(this.#getObj());
-    const token = this.#getObj();
-    const propArr = this.#getPropArray();
-    return sql`insert into users ${sql(token, ...propArr)} returning ${sql(
-      returningProps
-    )}`;
+    try {
+      const returningProps = Object.keys(this.#getObj());
+      const token = this.#getObj();
+      const propArr = this.#getPropArray();
+      const createdUser = await sql`insert into users ${sql(
+        token,
+        ...propArr
+      )} returning ${sql(returningProps)}`;
+      return createdUser;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
   async save() {
-    const users = this.#getObjWithoutId();
-    const propArr = this.#getPropArray();
-    return sql`update users
-                   set ${sql(users, ...propArr)}
-                   where id_user = ${this.id_user}`;
+    try {
+      const newUs = _.pickBy(this.#getObjWithoutId(), _.identity);
+      const propArr = Object.keys(newUs);
+      const returningProps = Object.keys(this.#getObj());
+      const saveUser = await sql`update users
+                                 set ${sql(newUs, ...propArr)}
+                                 where id_user = ${
+                                   this.id_user
+                                 } returning ${sql(returningProps)}`;
+      if (saveUser.count !== 1) {
+        throw ApiError.DatabaseError("Nothing has been saved");
+      }
+      return saveUser;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
   static async findOneById(id) {
-    return sql`select id_user,
-                          email,
-                          password,
-                          created_at,
-                          deleted,
-                          role
-                   from users
-                   where id_user = ${id}
-                   limit 1`;
+    try {
+      const findRes = await sql`select id_user,
+                                             email,
+                                             password,
+                                             created_at,
+                                             deleted,
+                                             role
+                                      from users
+                                      where id_user = ${id}
+                                      limit 1`;
+      return findRes;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
   static async findOneByEmail(email) {
-    return sql`select id_user,
-                          email,
-                          password,
-                          created_at,
-                          deleted,
-                          role
-                   from users
-                   where email = ${email}
-                   limit 1`;
+    try {
+      const findRes = await sql`select id_user,
+                                             email,
+                                             password,
+                                             created_at,
+                                             deleted,
+                                             role
+                                      from users
+                                      where email = ${email}
+                                      limit 1`;
+      return findRes;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 
   static async getAll() {
-    return sql`select id_user,
-                          email,
-                          password,
-                          created_at,
-                          deleted,
-                          role
-                   from users`;
+    try {
+      const getAll = await sql`select id_user,
+                                            email,
+                                            password,
+                                            created_at,
+                                            deleted,
+                                            role
+                                     from users`;
+      return getAll;
+    } catch (e) {
+      throw ApiError.DatabaseError("Database error");
+    }
   }
 }
 

@@ -15,6 +15,7 @@ class TokenService {
       refreshToken,
     };
   }
+  id_artist_contract;
 
   validateAccessToken(token) {
     try {
@@ -34,7 +35,7 @@ class TokenService {
     }
   }
 
-  async saveToken(userId, refreshToken) {
+  async saveToken(userId, refreshToken, next) {
     try {
       const token = new Token({
         fk_user_id: userId,
@@ -42,17 +43,17 @@ class TokenService {
       });
       await token.saveOrIfExistUpdate();
     } catch (e) {
-      ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
+      next(e);
     }
   }
 
-  async removeToken(refreshToken) {
+  async removeToken(refreshToken, next) {
     try {
       const oldToken = await Token.findToken(refreshToken);
       await Token.removeToken(refreshToken);
       return oldToken;
     } catch (e) {
-      ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
+      next(e);
     }
   }
 }

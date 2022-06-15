@@ -6,6 +6,7 @@ const sql = require("./libs/postgres.js");
 const artistRouter = require("./router/artistRouter.js");
 const adminRouter = require("./router/adminRouter.js");
 const authRouter = require("./router/authRouter.js");
+const checkConnection = require("./libs/checkConnection.js");
 
 const PORT = process.env.APP_PORT;
 const app = express();
@@ -27,15 +28,10 @@ app.use(errorMiddleware);
 
 const start = async () => {
   try {
-    await sql`select id_user
-                  from users
-                  limit 1`;
-  } catch (e) {
-    throw Error("Ошибка подключения к базе данных");
-  }
-  try {
-    module.exports = sql;
-    app.listen(PORT, () => console.log(`Server started on PORT = ${PORT}`));
+    await checkConnection();
+    app.listen(PORT, () =>
+      console.log(`Server has been started on port: ${PORT}`)
+    );
   } catch (e) {
     console.log(e);
   }
