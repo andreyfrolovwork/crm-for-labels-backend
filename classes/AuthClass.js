@@ -2,7 +2,7 @@ const userService = require("../service/UserService.js");
 const ApiError = require("../exceptions/ApiError.js");
 const { isEmail, isStrongPassword } = require("validator");
 
-class Auth {
+class AuthClass {
   async registration(req, res, next) {
     try {
       if (!isEmail(req.body.email)) {
@@ -97,4 +97,4 @@ class Auth {
   }
 }
 
-module.exports = new Auth();
+module.exports = new AuthClass();

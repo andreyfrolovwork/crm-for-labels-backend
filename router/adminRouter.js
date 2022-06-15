@@ -3,14 +3,14 @@ const adminRouter = new Router();
 const AuthMiddleware = require("../middlewares/AuthMiddleware.js");
 const checkAdminRole = AuthMiddleware.checkAdminRole.bind(AuthMiddleware);
 
-const Admin = require("./../classes/Admin.js");
+const AdminClass = require("../classes/AdminClass.js");
 
-adminRouter.get("/get-artists", checkAdminRole, Admin.getArtists);
-adminRouter.post("/post-artist", checkAdminRole, Admin.getArtists);
-adminRouter.put("/put-artist", checkAdminRole, Admin.putArtist);
-adminRouter.delete("/delete-artist", checkAdminRole, Admin.getArtists);
+adminRouter.get("/get-artists", checkAdminRole, AdminClass.getArtists);
+adminRouter.post("/post-artist", checkAdminRole, AdminClass.getArtists);
+adminRouter.put("/put-artist", checkAdminRole, AdminClass.putArtist);
+adminRouter.delete("/delete-artist", checkAdminRole, AdminClass.getArtists);
 
-adminRouter.get("/get-users", checkAdminRole, Admin.getUsers);
-adminRouter.put("/put-user", checkAdminRole, Admin.putUser);
+adminRouter.get("/get-users", checkAdminRole, AdminClass.getUsers);
+adminRouter.put("/put-user", checkAdminRole, AdminClass.putUser);
 
 module.exports = adminRouter;

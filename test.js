@@ -173,8 +173,8 @@
   peopleHi();
 })();*/
 
-(async () => {
-  const sql = require("./models/postgres.js");
+/*(async () => {
+  const sql = require("./libs/postgres.js");
   const user = {
     id_user: 5,
     email: "123@mail.ru",
@@ -191,5 +191,98 @@
   } catch (e) {
     console.log(e);
     debugger;
+  }
+})();*/
+/*(async () => {
+  const sql = require("./libs/postgres.js");
+  const User = require("./models/User.js");
+  const _ = require("lodash");
+  const moment = require("moment");
+
+  function castToTypes(user) {
+    let newUser = { ...user };
+    newUser.id_user = Number(user.id_user);
+    if (user.deleted === "true") {
+      newUser.deleted = true;
+    } else if (user.deleted === "false") {
+      newUser.deleted = false;
+    } else if (typeof user.deleted !== "boolean") {
+      newUser.deleted = undefined;
+    }
+
+    newUser.created_at = moment(user.created_at).format("YYYY-MM-DD");
+    /!* newUser.deleted = JSON.stringify(user.deleted);*!/
+    return newUser;
+  }
+
+  async function testSave(user) {
+    const userFromDb = await sql`select id_user,
+                   email,
+                   password,
+                   created_at,
+                   deleted,
+                   role
+            from users
+            where id_user = ${user.id_user} limit 1`;
+
+    const userCasted = castToTypes(userFromDb[0]);
+    let u = { ...UserModel };
+    console.log("тест", _.isEqual(u, userCasted));
+    debugger;
+  }
+
+  const user = {
+    refresh_token: "123",
+  };
+
+  const UserModel = new User(user);
+
+  try {
+    const res = await UserModel.save();
+    /!*        const users = await User.getAll();*!/
+    /!*const u1 = await User.findOneById(5);*!/
+    /!* await testSave(user);*!/
+    debugger;
+  } catch (e) {
+    debugger;
+    console.log(e);
+  }
+})();*/
+/*(async () => {
+  const sql = require("./libs/postgres.js");
+  const Token = require("./models/Token.js");
+  const User = require("./models/User.js");
+
+  const _ = require("lodash");
+  const moment = require("moment");
+
+  const artist = {
+    email: "123",
+  };
+
+  const ArtistModel = new User(artist);
+
+  try {
+    const res = await ArtistModel.create();
+    debugger;
+  } catch (e) {
+    debugger;
+    console.log(e);
+  }
+})();*/
+(async () => {
+  const sql = require("./libs/postgres.js");
+  const Token = require("./models/Token.js");
+
+  try {
+    const token = new Token({
+      fk_user_id: 33,
+      refresh_token: "update",
+    });
+    const res = await token.saveOrIfExistUpdate();
+    debugger;
+  } catch (e) {
+    debugger;
+    console.log(e);
   }
 })();

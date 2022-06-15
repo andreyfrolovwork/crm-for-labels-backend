@@ -1,7 +1,7 @@
-const sql = require("../models/postgres.js");
+const sql = require("../libs/postgres.js");
 const ApiError = require("../exceptions/ApiError.js");
 
-class Artist {
+class ArtistClass {
   async getAboutMe(req, res, next) {
     try {
       const artistData = await sql`
@@ -24,4 +24,4 @@ class Artist {
   }
 }
 
-module.exports = new Artist();
+module.exports = new ArtistClass();

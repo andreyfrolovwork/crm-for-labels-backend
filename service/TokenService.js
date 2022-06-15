@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const sql = require("./../models/postgres.js");
 const ApiError = require("../exceptions/ApiError.js");
+const Token = require("./../models/Token.js");
 
 class TokenService {
   generateTokens(payload) {
@@ -36,24 +36,11 @@ class TokenService {
 
   async saveToken(userId, refreshToken) {
     try {
-      const oldToken = await sql`
-                select fk_user_id
-                from tokens
-                where fk_user_id = ${userId} limit 1
-            `;
-      const oldTokenIsExist = oldToken.length !== 0;
-      if (oldTokenIsExist) {
-        const updateToken = await sql`
-                    update tokens
-                    set refresh_token = ${refreshToken}
-                    where fk_user_id = ${userId}
-                `;
-      } else {
-        const insertToken = await sql`
-        insert into tokens (fk_user_id, refresh_token)
-        values (${userId}, ${refreshToken}) 
-        `;
-      }
+      const token = new Token({
+        fk_user_id: userId,
+        refresh_token: refreshToken,
+      });
+      await token.saveOrIfExistUpdate();
     } catch (e) {
       ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
     }
@@ -61,25 +48,12 @@ class TokenService {
 
   async removeToken(refreshToken) {
     try {
-      const oldToken = await sql`
-                select fk_user_id, refresh_token
-                from tokens
-                where refresh_token = '${refreshToken}' limit 1
-            `;
-      const deleteToken = await sql`
-                delete
-                from tokens
-                where refresh_token = '${refreshToken}' limit 1
-            `;
+      const oldToken = await Token.findToken(refreshToken);
+      await Token.removeToken(refreshToken);
       return oldToken;
     } catch (e) {
       ApiError.DatabaseError("Ошибка при взаимодействии с базой данных");
     }
-  }
-
-  async findToken(refreshToken) {
-    const tokenData = await tokenModel.findOne({ refreshToken });
-    return tokenData;
   }
 }
 
