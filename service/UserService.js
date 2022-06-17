@@ -7,7 +7,7 @@ const Artist = require("./../models/Artist.js");
 const Token = require("./../models/Token.js");
 
 class UserService {
-  async registration(email, password, isArtist, next) {
+  static async registration(email, password, isArtist, next) {
     try {
       const candidate = await User.findOneByEmail(email);
       if (candidate.length !== 0) {
@@ -26,7 +26,7 @@ class UserService {
         const artist = new Artist({
           fk_id_user: newUser[0].id_user,
         });
-        const newArtist = await artist.create();
+        await artist.create();
         debugger;
       } else {
         const user = new User({
@@ -45,7 +45,7 @@ class UserService {
     }
   }
 
-  async login(email, password, next) {
+  static async login(email, password, next) {
     let user;
     try {
       user = await User.findOneByEmail(email);
@@ -71,12 +71,12 @@ class UserService {
     return { ...tokens_, user: userDto_ };
   }
 
-  async logout(refreshToken, next) {
+  static async logout(refreshToken, next) {
     const token = await tokenService.removeToken(refreshToken, next);
     return token;
   }
 
-  async refresh(refreshToken, next) {
+  static async refresh(refreshToken, next) {
     if (!refreshToken) {
       throw ApiError.UnauthorizedError();
     }
@@ -97,6 +97,19 @@ class UserService {
       next(e);
     }
   }
+  static async getUsers() {
+    return User.getAll();
+  }
+
+  static async putUser(puttedUser) {
+    try {
+      const user = new User(puttedUser);
+      await user.save();
+      return user;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
-module.exports = new UserService();
+module.exports = UserService;

@@ -1,8 +1,9 @@
+// noinspection JSCheckFunctionSignatures
+
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./middlewares/ErrorMiddleware.js");
-const sql = require("./libs/postgres.js");
 const artistRouter = require("./router/artistRouter.js");
 const adminRouter = require("./router/adminRouter.js");
 const authRouter = require("./router/authRouter.js");
@@ -37,4 +38,4 @@ const start = async () => {
   }
 };
 
-start();
+start().then();

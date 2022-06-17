@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 /*(async () => {
   const mysql = require("mysql2/promise");
   const ApiError = require("./exceptions/api-error.js");

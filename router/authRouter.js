@@ -1,5 +1,5 @@
 const Router = require("express").Router;
-const AuthClass = require("../classes/AuthClass.js");
+const AuthClass = require("../service/AuthService.js");
 const authRouter = new Router();
 
 authRouter.post("/signup", AuthClass.registration);

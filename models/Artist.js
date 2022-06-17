@@ -176,7 +176,7 @@ class Artist {
     }
   }
 
-  static async getAll(next) {
+  static async getAll() {
     try {
       const users = await sql`select id_artist_contract,
                                            fk_id_user,
@@ -199,7 +199,6 @@ class Artist {
                                     from artists`;
       return users;
     } catch (e) {
-      next(e);
       throw ApiError.DatabaseError("Database error");
     }
   }

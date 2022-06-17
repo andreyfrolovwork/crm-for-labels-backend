@@ -19,13 +19,7 @@ class Tokens {
     };
   }
 
-  #getObjWithoutId() {
-    return {
-      refresh_token: this.refresh_token,
-    };
-  }
-
-  #getPropArray(obj) {
+  #getPropArray() {
     let token;
     token = this.#getObj();
 

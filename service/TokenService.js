@@ -1,12 +1,13 @@
 const jwt = require("jsonwebtoken");
-const ApiError = require("../exceptions/ApiError.js");
 const Token = require("./../models/Token.js");
 
 class TokenService {
   generateTokens(payload) {
+    // noinspection JSCheckFunctionSignatures
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
       expiresIn: process.env.EXPIRES_IN_ACCESS_TOKEN,
     });
+    // noinspection JSCheckFunctionSignatures
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
       expiresIn: process.env.EXPIRES_IN_REFRESH_TOKEN,
     });
@@ -19,6 +20,7 @@ class TokenService {
 
   validateAccessToken(token) {
     try {
+      // noinspection JSCheckFunctionSignatures
       const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
       return userData;
     } catch (e) {
@@ -28,6 +30,7 @@ class TokenService {
 
   validateRefreshToken(token) {
     try {
+      // noinspection JSCheckFunctionSignatures
       const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
       return userData;
     } catch (e) {

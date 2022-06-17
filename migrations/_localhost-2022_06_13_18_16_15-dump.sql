@@ -1,3 +1,5 @@
+-- noinspection SyntaxErrorForFile
+
 --
 -- PostgreSQL database dump
 --

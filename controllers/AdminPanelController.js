@@ -1,19 +1,45 @@
-const sql = require("../libs/postgres.js");
-const ApiError = require("../exceptions/ApiError.js");
-const User = require("./../models/User.js");
-const Artist = require("./../models/Artist.js");
+const UserService = require("../service/UserService.js");
+const ArtistService = require("../service/ArtistService.js");
 
-class AdminClass {
-  async getArtists(req, res, next) {
+class AdminPanelController {
+  static async getUsers(req, res, next) {
     try {
-      const users = await Artist.getAll(next);
+      const users = await UserService.getUsers();
       res.json(users);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
+  static async putUser(req, res, next) {
+    try {
+      const { id_user, email, created_at, deleted, role } = req.body;
+      const user = await UserService.putUser(
+        {
+          id_user: id_user,
+          email: email,
+          created_at: created_at,
+          deleted: deleted,
+          role: role,
+        },
+        next
+      );
+      res.json(user);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
+  static async getArtists(req, res, next) {
+    try {
+      const artists = await ArtistService.getArtists();
+      res.json(artists);
     } catch (e) {
       next(e);
     }
   }
 
-  async putArtist(req, res, next) {
+  static async putArtist(req, res, next) {
     try {
       const {
         id_artist_contract,
@@ -36,7 +62,7 @@ class AdminClass {
         deleted,
       } = req.body;
 
-      const user = new Artist({
+      const savedArtist = await ArtistService.putArtist({
         id_artist_contract: id_artist_contract,
         fk_id_user: fk_id_user,
         creative_pseudonym: creative_pseudonym,
@@ -56,36 +82,7 @@ class AdminClass {
         contract_expiration_date: contract_expiration_date,
         deleted: deleted,
       });
-      await user.save();
-      res.json("good");
-    } catch (e) {
-      console.log(e);
-      next(e);
-    }
-  }
-
-  async getUsers(req, res, next) {
-    try {
-      const users = await User.getAll();
-      res.json(users);
-    } catch (e) {
-      console.log(e);
-      next(e);
-    }
-  }
-
-  async putUser(req, res, next) {
-    try {
-      const { id_user, email, created_at, deleted, role } = req.body;
-      const user = new User({
-        id_user: id_user,
-        email: email,
-        created_at: created_at,
-        deleted: deleted,
-        role: role,
-      });
-      await user.save();
-      res.json("good");
+      res.json(savedArtist);
     } catch (e) {
       console.log(e);
       next(e);
@@ -93,4 +90,4 @@ class AdminClass {
   }
 }
 
-module.exports = new AdminClass();
+module.exports = AdminPanelController;
