@@ -1,6 +1,7 @@
 require("dotenv").config();
 const initModels = require("./init-models.js");
 const Sequelize = require("sequelize");
+// noinspection JSValidateTypes
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,

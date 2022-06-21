@@ -1,4 +1,3 @@
-const Artist = require("../models-old/Artist.js");
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
 
@@ -11,7 +10,7 @@ class ArtistService {
     });
   }
   static async getArtists() {
-    return Artist.getAll();
+    return models.artists.findAll();
   }
 
   static async putArtist(puttedArtist) {

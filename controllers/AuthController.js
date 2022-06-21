@@ -1,8 +1,8 @@
-const UserService = require("./UserService.js");
+const UserService = require("../service/UserService.js");
 const ApiError = require("../exceptions/ApiError.js");
 const { isEmail, isStrongPassword } = require("validator");
 
-class AuthService {
+class AuthController {
   async registration(req, res, next) {
     try {
       if (!isEmail(req.body.email)) {
@@ -40,9 +40,7 @@ class AuthService {
   }
 
   async login(req, res, next) {
-    return next(ApiError.BadRequest("123"));
-    /*    try {
-      throw ;
+    try {
       const { email, password } = req.body;
       const userData = await UserService.login(email, password, next);
       res.cookie("refreshToken", userData.refreshToken, {
@@ -51,28 +49,26 @@ class AuthService {
       });
       return res.json(userData);
     } catch (err) {
-      if (err instanceof ApiError) {
-        return res
-          .status(err.status)
-          .json({ message: err.message, errors: err.errors });
-      }
-      return res.status(500).json({ message: "Непредвиденная ошибка" });
-    }*/
+      next(err);
+    }
   }
 
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      const token = await UserService.logout(refreshToken, next);
       res.clearCookie("refreshToken");
-      return res.json(token);
+      if (refreshToken) {
+        const token = await UserService.logout(refreshToken, next);
+        return res.json(token?.refresh_token);
+      }
+      throw ApiError.BadRequest("refreshToken not define");
     } catch (e) {
       next(e);
     }
   }
+
   async refresh(req, res, next) {
     try {
-      throw ApiError.UnauthorizedError();
       const { refreshToken } = req.cookies;
       const userData = await UserService.refresh(refreshToken, next);
       res.cookie("refreshToken", userData.refreshToken, {
@@ -81,9 +77,9 @@ class AuthService {
       });
       return res.json(userData);
     } catch (e) {
-      next("123");
+      next(e);
     }
   }
 }
 
-module.exports = new AuthService();
+module.exports = new AuthController();

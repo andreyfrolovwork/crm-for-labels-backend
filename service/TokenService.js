@@ -42,7 +42,7 @@ class TokenService {
 
   async saveToken(userId, refreshToken) {
     try {
-      await models.tokens.update(
+      const update = await models.tokens.update(
         {
           fk_user_id: userId,
           refresh_token: refreshToken,
@@ -53,6 +53,13 @@ class TokenService {
           },
         }
       );
+      const notExist = update["0"] === 0;
+      if (notExist) {
+        const create = await models.tokens.create({
+          fk_user_id: userId,
+          refresh_token: refreshToken,
+        });
+      }
     } catch (e) {
       throw ApiError.DatabaseError("Error at save token");
     }
@@ -62,10 +69,13 @@ class TokenService {
     try {
       const oldToken = await models.tokens.findOne({
         where: {
-          refreshToken: refreshToken,
+          refresh_token: refreshToken,
         },
       });
-      await oldToken.destroy();
+      debugger;
+      if (oldToken) {
+        await oldToken.destroy();
+      }
       return oldToken;
     } catch (e) {
       next(e);

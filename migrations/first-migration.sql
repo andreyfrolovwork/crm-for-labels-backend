@@ -65,9 +65,9 @@ CREATE TABLE public.artists (
     id_artist_contract integer NOT NULL,
     fk_id_user integer,
     creative_pseudonym character varying(255),
-    name_2 character varying(255),
-    name_1 character varying(255),
-    name_3 character varying(255),
+    surname character varying(255),
+    name character varying(255),
+    patronymic character varying(255),
     document text,
     address text,
     email character varying(255),
@@ -175,7 +175,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id_user SET DEFAULT nextval('public.u
 -- Data for Name: artists; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.artists (id_artist_contract, fk_id_user, creative_pseudonym, name_2, name_1, name_3, document, address, email, inn, snils, bank_details, contract_number, contract_agreement, contract_fee, contract_fee_in_words, contract_expiration_date, deleted) FROM stdin;
+COPY public.artists (id_artist_contract, fk_id_user, creative_pseudonym, surname, name, patronymic, document, address, email, inn, snils, bank_details, contract_number, contract_agreement, contract_fee, contract_fee_in_words, contract_expiration_date, deleted) FROM stdin;
 2	4	Sabo	Sabo	1	2	3	4	5	6	7	8	9	2022-06-23	0	123	2022-06-10	f
 4	5	text in prop1	Monokle	1	2	3	4	5	6	7	8	9	2022-06-12	0	70 procent	2022-06-09	f
 1	2	Volor Flex	Alexander 	Frolov	Alexeseevich	74 50 402342	City Syktyvkar ul Gerov Tankograda	volor@flex.com	967471059784	584964395 34	to phone number 8034523124	DMG 61/21	2022-01-01	65	65 procent	2025-01-01	t
