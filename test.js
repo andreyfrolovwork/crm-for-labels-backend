@@ -274,7 +274,7 @@
 })();*/
 (async () => {
   const sql = require("./libs/postgres.js");
-  const Token = require("./models/Token.js");
+  const Token = require("./models-old/Token.js");
 
   try {
     const token = new Token({

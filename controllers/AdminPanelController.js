@@ -82,7 +82,9 @@ class AdminPanelController {
         contract_expiration_date: contract_expiration_date,
         deleted: deleted,
       });
-      res.json(savedArtist);
+      res.status(200).json({
+        message: "ok",
+      });
     } catch (e) {
       console.log(e);
       next(e);

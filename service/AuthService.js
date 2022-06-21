@@ -40,7 +40,9 @@ class AuthService {
   }
 
   async login(req, res, next) {
-    try {
+    return next(ApiError.BadRequest("123"));
+    /*    try {
+      throw ;
       const { email, password } = req.body;
       const userData = await UserService.login(email, password, next);
       res.cookie("refreshToken", userData.refreshToken, {
@@ -48,9 +50,14 @@ class AuthService {
         httpOnly: true,
       });
       return res.json(userData);
-    } catch (e) {
-      next(e);
-    }
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res
+          .status(err.status)
+          .json({ message: err.message, errors: err.errors });
+      }
+      return res.status(500).json({ message: "Непредвиденная ошибка" });
+    }*/
   }
 
   async logout(req, res, next) {
@@ -65,6 +72,7 @@ class AuthService {
   }
   async refresh(req, res, next) {
     try {
+      throw ApiError.UnauthorizedError();
       const { refreshToken } = req.cookies;
       const userData = await UserService.refresh(refreshToken, next);
       res.cookie("refreshToken", userData.refreshToken, {
@@ -73,7 +81,7 @@ class AuthService {
       });
       return res.json(userData);
     } catch (e) {
-      next(e);
+      next("123");
     }
   }
 }

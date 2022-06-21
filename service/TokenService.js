@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const Token = require("./../models/Token.js");
+const { models } = require("../models/models-export.js");
+const ApiError = require("../exceptions/ApiError.js");
 
 class TokenService {
   generateTokens(payload) {
@@ -16,6 +17,7 @@ class TokenService {
       refreshToken,
     };
   }
+
   id_artist_contract;
 
   validateAccessToken(token) {
@@ -38,22 +40,32 @@ class TokenService {
     }
   }
 
-  async saveToken(userId, refreshToken, next) {
+  async saveToken(userId, refreshToken) {
     try {
-      const token = new Token({
-        fk_user_id: userId,
-        refresh_token: refreshToken,
-      });
-      await token.saveOrIfExistUpdate();
+      await models.tokens.update(
+        {
+          fk_user_id: userId,
+          refresh_token: refreshToken,
+        },
+        {
+          where: {
+            fk_user_id: userId,
+          },
+        }
+      );
     } catch (e) {
-      next(e);
+      throw ApiError.DatabaseError("Error at save token");
     }
   }
 
   async removeToken(refreshToken, next) {
     try {
-      const oldToken = await Token.findToken(refreshToken);
-      await Token.removeToken(refreshToken);
+      const oldToken = await models.tokens.findOne({
+        where: {
+          refreshToken: refreshToken,
+        },
+      });
+      await oldToken.destroy();
       return oldToken;
     } catch (e) {
       next(e);
