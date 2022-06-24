@@ -3,14 +3,23 @@ const ApiError = require("../exceptions/ApiError.js");
 
 class ArtistService {
   static async getAboutMe(id_user) {
+    // noinspection JSCheckFunctionSignatures
     return models.artists.findOne({
       where: {
         fk_id_user: id_user,
       },
     });
   }
-  static async getArtists() {
-    return models.artists.findAll();
+  static async getArtists(page, limit) {
+    function getPage(page, limitForPage) {
+      const offset = page * limitForPage - limitForPage;
+      return offset;
+    }
+    const offset = getPage(page, limit);
+    return models.artists.findAndCountAll({
+      offset: offset,
+      limit: limit,
+    });
   }
 
   static async putArtist(puttedArtist) {

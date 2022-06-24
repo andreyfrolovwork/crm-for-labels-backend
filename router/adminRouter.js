@@ -4,7 +4,7 @@ const AuthMiddleware = require("../middlewares/AuthMiddleware.js");
 const checkAdminRole = AuthMiddleware.checkAdminRole.bind(AuthMiddleware);
 const ArtistPanelController = require("../controllers/AdminPanelController.js");
 
-adminRouter.get(
+adminRouter.post(
   "/get-artists",
   checkAdminRole,
   ArtistPanelController.getArtists
@@ -20,7 +20,7 @@ adminRouter.delete(
   checkAdminRole,
   ArtistPanelController.getArtists
 );
-adminRouter.get("/get-users", checkAdminRole, ArtistPanelController.getUsers);
+adminRouter.post("/get-users", checkAdminRole, ArtistPanelController.getUsers);
 adminRouter.put("/put-user", checkAdminRole, ArtistPanelController.putUser);
 
 module.exports = adminRouter;

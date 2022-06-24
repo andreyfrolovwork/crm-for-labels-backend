@@ -2,48 +2,54 @@
 
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  return users.init(sequelize, DataTypes);
+  return albums.init(sequelize, DataTypes);
 };
 
-class users extends Sequelize.Model {
+class albums extends Sequelize.Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
-        id_user: {
+        id_album: {
           autoIncrement: true,
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
         },
-        email: {
+        fk_id_user: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: "users",
+            key: "id_user",
+          },
+        },
+        fk_id_artist: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: "artists",
+            key: "id_artist_contract",
+          },
+        },
+        name: {
           type: DataTypes.STRING(255),
           allowNull: true,
         },
-        password: {
-          type: DataTypes.TEXT,
+        cover: {
+          type: DataTypes.STRING(255),
           allowNull: true,
-        },
-        deleted: {
-          type: DataTypes.BOOLEAN,
-          allowNull: true,
-          defaultValue: false,
-        },
-        role: {
-          type: DataTypes.ENUM("admin", "admin_not_activated", "artist"),
-          allowNull: true,
-          defaultValue: "artist",
         },
       },
       {
         sequelize,
-        tableName: "users",
+        tableName: "albums",
         schema: "public",
         timestamps: true,
         indexes: [
           {
-            name: "users_pkey",
+            name: "albums_pkey",
             unique: true,
-            fields: [{ name: "id_user" }],
+            fields: [{ name: "id_album" }],
           },
         ],
       }

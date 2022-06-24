@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
 
+// noinspection JSUnusedLocalSymbols
 class TokenService {
   generateTokens(payload) {
     // noinspection JSCheckFunctionSignatures
@@ -67,12 +68,12 @@ class TokenService {
 
   async removeToken(refreshToken, next) {
     try {
+      // noinspection JSCheckFunctionSignatures
       const oldToken = await models.tokens.findOne({
         where: {
           refresh_token: refreshToken,
         },
       });
-      debugger;
       if (oldToken) {
         await oldToken.destroy();
       }

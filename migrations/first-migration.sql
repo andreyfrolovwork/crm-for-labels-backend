@@ -1,3 +1,5 @@
+-- noinspection SqlResolveForFile
+
 -- noinspection SyntaxErrorForFile
 
 --
@@ -198,7 +200,7 @@ COPY public.tokens (fk_user_id, refresh_token) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id_user, email, password, created_at, deleted, role) FROM stdin;
+COPY public.users (id_user, email, password, createdAt, deleted, role) FROM stdin;
 1	iobox420@gmail.com	$2b$04$yi74RiguusW9SqKPZM.ZQOkQi3ANPE8ewZ709kHMrHw4W4FhCQrXC	2022-06-03	f	admin
 4	iobox432@gmail.com	$2b$04$yi74RiguusW9SqKPZM.ZQOkQi3ANPE8ewZ709kHMrHw4W4FhCQrXC	2022-06-12	t	artist
 3	iobox4233@gmail.com	$2b$04$yi74RiguusW9SqKPZM.ZQOkQi3ANPE8ewZ709kHMrHw4W4FhCQrXC	2022-06-12	f	artist

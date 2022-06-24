@@ -20,8 +20,11 @@ app.use(
   })
 );
 
+// noinspection JSCheckFunctionSignatures
 app.use("/crm-api", authRouter);
+// noinspection JSCheckFunctionSignatures
 app.use("/crm-api/admin", adminRouter);
+// noinspection JSCheckFunctionSignatures
 app.use("/crm-api/artist", artistRouter);
 
 app.use(errorMiddleware);

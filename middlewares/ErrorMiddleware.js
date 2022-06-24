@@ -1,5 +1,6 @@
 const ApiError = require("../exceptions/ApiError.js");
 
+// noinspection JSUnusedLocalSymbols
 module.exports = function (err, req, res, next) {
   console.log(err);
   if (err instanceof ApiError) {

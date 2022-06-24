@@ -1,16 +1,23 @@
 const UserService = require("../service/UserService.js");
 const ArtistService = require("../service/ArtistService.js");
+const ApiError = require("../exceptions/ApiError.js");
 
+// noinspection JSUnusedLocalSymbols
 class AdminPanelController {
   static async getUsers(req, res, next) {
     try {
-      const users = await UserService.getUsers();
+      const { page, limit } = req.body;
+      if (!page || !limit) {
+        throw ApiError.BadRequest("Page or limit undefined");
+      }
+      const users = await UserService.getUsers(page, limit);
       res.json(users);
     } catch (e) {
       console.log(e);
       next(e);
     }
   }
+
   static async putUser(req, res, next) {
     try {
       const { id_user, email, created_at, deleted, role } = req.body;
@@ -30,9 +37,14 @@ class AdminPanelController {
       next(e);
     }
   }
+
   static async getArtists(req, res, next) {
     try {
-      const artists = await ArtistService.getArtists();
+      const { page, limit } = req.body;
+      if (!page || !limit) {
+        throw ApiError.BadRequest("Page or limit undefined");
+      }
+      const artists = await ArtistService.getArtists(page, limit);
       res.json(artists);
     } catch (e) {
       next(e);

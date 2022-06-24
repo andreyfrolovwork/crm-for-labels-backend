@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   return tokens.init(sequelize, DataTypes);

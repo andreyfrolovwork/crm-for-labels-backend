@@ -4,9 +4,11 @@ const UserDto = require("../dtos/UserDto.js");
 const ApiError = require("../exceptions/ApiError.js");
 const { models } = require("../models/models-export.js");
 
+// noinspection JSCheckFunctionSignatures,JSUnusedLocalSymbols
 class UserService {
   static async registration(email, password, isArtist) {
     try {
+      // noinspection JSCheckFunctionSignatures
       const candidate = await models.users.findOne({
         where: {
           email: email,
@@ -86,6 +88,7 @@ class UserService {
       }
       const userData = tokenService.validateRefreshToken(refreshToken);
 
+      // noinspection JSCheckFunctionSignatures
       const tokenFromDatabase = await models.tokens.findOne({
         where: {
           refresh_token: refreshToken,
@@ -109,8 +112,16 @@ class UserService {
       throw e;
     }
   }
-  static async getUsers() {
-    return models.users.findAll();
+  static async getUsers(page, limit) {
+    function getPage(page, limitForPage) {
+      const offset = page * limitForPage - limitForPage;
+      return offset;
+    }
+    const offset = getPage(page, limit);
+    return models.users.findAndCountAll({
+      offset: offset,
+      limit: limit,
+    });
   }
 
   static async putUser(puttedUser) {
