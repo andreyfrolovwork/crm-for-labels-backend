@@ -41,6 +41,17 @@ class ArtistService {
       throw e;
     }
   }
+  static async getAboutArtist(id_artist_contract) {
+    try {
+      return models.artists.findOne({
+        where: {
+          id_artist_contract: id_artist_contract,
+        },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 module.exports = ArtistService;

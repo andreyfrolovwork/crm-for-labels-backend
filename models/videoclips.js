@@ -55,7 +55,7 @@ class videoclips extends Sequelize.Model {
             key: "id_user",
           },
         },
-        fk_id_artist: {
+        fk_id_artist_contract: {
           type: DataTypes.INTEGER,
           allowNull: true,
           references: {

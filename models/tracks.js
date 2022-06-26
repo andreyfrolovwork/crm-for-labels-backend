@@ -43,7 +43,7 @@ class tracks extends Sequelize.Model {
           type: DataTypes.INTEGER,
           allowNull: true,
         },
-        fk_id_artist: {
+        fk_id_artist_contract: {
           type: DataTypes.INTEGER,
           allowNull: true,
           references: {
