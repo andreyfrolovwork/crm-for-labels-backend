@@ -24,12 +24,12 @@ class ArtistService {
 
   static async putArtist(puttedArtist) {
     try {
-      const { id_artist_contract } = puttedArtist;
-      delete puttedArtist.id_artist_contract;
+      const { fk_id_artist_contract } = puttedArtist;
+      delete puttedArtist.fk_id_artist_contract;
       delete puttedArtist.fk_id_user;
       const artist = await models.artists.update(puttedArtist, {
         where: {
-          id_artist_contract: id_artist_contract,
+          fk_id_artist_contract: fk_id_artist_contract,
         },
       });
       if (artist[0] === 1) {

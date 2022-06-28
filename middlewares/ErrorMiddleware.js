@@ -3,6 +3,10 @@ const ApiError = require("../exceptions/ApiError.js");
 // noinspection JSUnusedLocalSymbols
 module.exports = function (err, req, res, next) {
   console.log(err);
+  const stack = err.stack.split("/\n");
+  stack.forEach((at) => {
+    console.log(at);
+  });
   if (err instanceof ApiError) {
     return res
       .status(err.status)
