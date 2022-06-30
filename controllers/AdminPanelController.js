@@ -13,9 +13,12 @@ const AlbumService = require("../service/AlbumService.js");
 class AdminPanelController {
   static async getUsers(req, res, next) {
     try {
-      const { page, limit } = req.body;
-      if (!page || !limit) {
-        throw ApiError.BadRequest("Page or limit undefined");
+      let { page, limit } = req.query;
+      if (!page) {
+        page = 1;
+      }
+      if (!limit) {
+        limit = 10;
       }
       const users = await UserService.getUsers(page, limit);
       res.json(users);
@@ -47,9 +50,12 @@ class AdminPanelController {
 
   static async getArtists(req, res, next) {
     try {
-      const { page, limit } = req.body;
-      if (!page || !limit) {
-        throw ApiError.BadRequest("Page or limit undefined");
+      let { page, limit } = req.query;
+      if (!page) {
+        page = 1;
+      }
+      if (!limit) {
+        limit = 10;
       }
       const artists = await ArtistService.getArtists(page, limit);
       res.json(artists);

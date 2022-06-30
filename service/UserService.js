@@ -121,6 +121,7 @@ class UserService {
     return models.users.findAndCountAll({
       offset: offset,
       limit: limit,
+      order: [["id_user", "ASC"]],
     });
   }
 

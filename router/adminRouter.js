@@ -4,11 +4,11 @@ const AuthMiddleware = require("../middlewares/AuthMiddleware.js");
 const checkAdminRole = AuthMiddleware.checkAdminRole.bind(AuthMiddleware);
 const AdminPC = require("../controllers/AdminPanelController.js");
 
-adminRouter.post("/get-artists", checkAdminRole, AdminPC.getArtists);
+adminRouter.get("/get-artists", checkAdminRole, AdminPC.getArtists);
 adminRouter.post("/post-artist", checkAdminRole, AdminPC.getArtists);
 adminRouter.put("/put-artist", checkAdminRole, AdminPC.putArtist);
 adminRouter.delete("/delete-artist", checkAdminRole, AdminPC.getArtists);
-adminRouter.post("/get-users", checkAdminRole, AdminPC.getUsers);
+adminRouter.get("/get-users", checkAdminRole, AdminPC.getUsers);
 adminRouter.put("/put-user", checkAdminRole, AdminPC.putUser);
 
 adminRouter.post("/get-about-artist", checkAdminRole, AdminPC.getAboutArtist);

@@ -1,5 +1,6 @@
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
+const _ = require("lodash");
 
 class ArtistService {
   static async getAboutMe(id_user) {
@@ -19,17 +20,19 @@ class ArtistService {
     return models.artists.findAndCountAll({
       offset: offset,
       limit: limit,
+      order: [["id_artist_contract", "ASC"]],
     });
   }
 
   static async putArtist(puttedArtist) {
     try {
-      const { fk_id_artist_contract } = puttedArtist;
+      const { id_artist_contract } = puttedArtist;
+      let clearArtist = _.omitBy(puttedArtist, _.isUndefined);
       delete puttedArtist.fk_id_artist_contract;
       delete puttedArtist.fk_id_user;
-      const artist = await models.artists.update(puttedArtist, {
+      const artist = await models.artists.update(clearArtist, {
         where: {
-          fk_id_artist_contract: fk_id_artist_contract,
+          id_artist_contract: id_artist_contract,
         },
       });
       if (artist[0] === 1) {
