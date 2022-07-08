@@ -15,13 +15,16 @@ adminRouter.post("/get-about-artist", checkAdminRole, AdminPC.getAboutArtist);
 
 /*post routes*/
 adminRouter.post("/post-act", checkAdminRole, AdminPC.postAct);
+adminRouter.put("/put-act", checkAdminRole, AdminPC.putAct);
+adminRouter.delete("/delete-act", checkAdminRole, AdminPC.deleteAct);
+
 adminRouter.post("/post-album", checkAdminRole, AdminPC.postAlbum);
 adminRouter.post("/post-track", checkAdminRole, AdminPC.postTracks);
 adminRouter.post("/post-release", checkAdminRole, AdminPC.postRelease);
 adminRouter.post("/post-videoclip", checkAdminRole, AdminPC.postVideoclip);
 
 /*get routes*/
-adminRouter.post("/get-acts", checkAdminRole, AdminPC.getActs);
+adminRouter.get("/get-acts", checkAdminRole, AdminPC.getActs);
 adminRouter.post("/get-albums", checkAdminRole, AdminPC.getAlbums);
 adminRouter.post("/get-tracks", checkAdminRole, AdminPC.getTracks);
 adminRouter.post("/get-releases", checkAdminRole, AdminPC.getReleases);
