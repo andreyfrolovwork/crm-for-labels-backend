@@ -1,8 +1,6 @@
 ### CRM for labels
 ### Как развернуть?
-Актуальная ветка iobox420
 ```
-git checkout iobox420
 yarn install
 yarn start
 ```

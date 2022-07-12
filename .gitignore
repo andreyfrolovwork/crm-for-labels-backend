@@ -1,5 +1,6 @@
 .idea/
-
+records/*
+!records/stack
 check.js
 *.sql
 
