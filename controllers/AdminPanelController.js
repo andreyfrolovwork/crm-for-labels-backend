@@ -8,9 +8,8 @@ const ReleasesService = require("../service/ReleasesService.js");
 const TracksService = require("../service/TracksService.js");
 const VideoclipsService = require("../service/VideoclipsService.js");
 const AlbumService = require("../service/AlbumService.js");
-const { isNumeric, isDate } = require("validator");
-const valid = require("../shared/valid.js");
 
+// noinspection JSUnusedLocalSymbols
 class AdminPanelController {
   static async getUsers(req, res, next) {
     try {
@@ -31,14 +30,12 @@ class AdminPanelController {
 
   static async putUser(req, res, next) {
     try {
-      const { id_user, email, createdAt, updatedAt, deleted, role } = req.body;
-
+      const { id_user, email, created_at, deleted, role } = req.body;
       const user = await UserService.putUser(
         {
           id_user: id_user,
           email: email,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
+          created_at: created_at,
           deleted: deleted,
           role: role,
         },
@@ -134,23 +131,17 @@ class AdminPanelController {
     }
   }
 
+  /*
+  post routes post routes post routes post routes post routes post routes post routes
+  */
   static async postAct(req, res, next) {
     try {
-      const { fk_id_artist_contract } = req.body;
-      valid([
-        [
-          isNumeric,
-          fk_id_artist_contract,
-          {},
-          "Id artist_contrac is not numeric",
-        ],
-      ]);
+      const act = req.body;
       const { id_user } = req.user;
-      const act = {
-        fk_id_artist_contract,
+      const resCreate = await ActServic.postAct({
+        ...act,
         fk_id_user: id_user,
-      };
-      const resCreate = await ActServic.postAct(act);
+      });
       res.status(200).json({
         message: "ok",
       });
@@ -158,47 +149,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
-  static async putAct(req, res, next) {
-    try {
-      const { id_act, fk_id_artist_contract, createdAt } = req.body;
-      const { id_user } = req.user;
-      valid([
-        [isNumeric, id_act, {}, "Field id_act is not a numeric"],
-        [
-          isNumeric,
-          fk_id_artist_contract,
-          {},
-          "Field fk_id_artist_contract is not a numeric",
-        ],
-        [isDate, createdAt, {}, "Field createdAt is not a date"],
-      ]);
-      const puttedAct = {
-        id_act,
-        fk_id_user: id_user,
-        fk_id_artist_contract,
-        createdAt,
-      };
-      await ActService.putAct(puttedAct);
-      res.status(200).json({ message: "ok" });
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  static async deleteAct(req, res, next) {
-    try {
-      const { id_act } = req.body;
-      valid([[isNumeric, id_act, {}, "Field id_act is not numeric"]]);
-      await ActService.deleteAct({
-        id_act: id_act,
-      });
-      res.status(200).json({ message: "ok" });
-    } catch (e) {
-      next(e);
-    }
-  }
-
   static async postAlbum(req, res, next) {
     try {
       const album = req.body;
@@ -214,7 +164,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async postTracks(req, res, next) {
     try {
       const track = req.body;
@@ -230,7 +179,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async postRelease(req, res, next) {
     try {
       const release = req.body;
@@ -246,7 +194,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async postVideoclip(req, res, next) {
     try {
       const videoclip = req.body;
@@ -262,28 +209,18 @@ class AdminPanelController {
       next(e);
     }
   }
-
+  /*
+  get routes get routes get routes get routes get routes get routes get routes
+  */
   static async getActs(req, res, next) {
     try {
-      let { page, limit, fk_id_artist_contract } = req.query;
-      if (!page) {
-        page = 1;
-      }
-
-      if (!limit) {
-        limit = 10;
-      }
-      const acts = await ActServic.getActs({
-        fk_id_artist_contract: fk_id_artist_contract,
-        page: page,
-        limit: limit,
-      });
+      const { fk_id_artist_contract } = req.body;
+      const acts = await ActServic.getActs(fk_id_artist_contract);
       res.json(acts);
     } catch (e) {
       next(e);
     }
   }
-
   static async getAlbums(req, res, next) {
     try {
       const { fk_id_artist_contract } = req.body;
@@ -293,7 +230,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async getReleases(req, res, next) {
     try {
       const { fk_id_artist_contract } = req.body;
@@ -303,7 +239,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async getTracks(req, res, next) {
     try {
       const { fk_id_artist_contract } = req.body;
@@ -313,7 +248,6 @@ class AdminPanelController {
       next(e);
     }
   }
-
   static async getVideoclips(req, res, next) {
     try {
       const { fk_id_artist_contract } = req.body;
