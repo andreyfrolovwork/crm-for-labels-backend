@@ -5,6 +5,7 @@ const getPage = require("../shared/getPage.js");
 
 class ArtistService {
   static async getAboutMe(id_user) {
+    // noinspection JSCheckFunctionSignatures
     return models.artists.findOne({
       where: {
         fk_id_user: id_user,
@@ -23,7 +24,7 @@ class ArtistService {
   static async putArtist(puttedArtist) {
     try {
       const { id_artist_contract } = puttedArtist;
-      const clearArtist = _.omitBy(puttedArtist, _.isUndefined);
+      let clearArtist = _.omitBy(puttedArtist, _.isUndefined);
       delete puttedArtist.fk_id_artist_contract;
       delete puttedArtist.fk_id_user;
       const artist = await models.artists.update(clearArtist, {
