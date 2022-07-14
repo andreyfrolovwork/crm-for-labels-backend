@@ -1,5 +1,6 @@
 .idea/
-test.js
+*.sql
+check.js
 
 .env
 # Logs

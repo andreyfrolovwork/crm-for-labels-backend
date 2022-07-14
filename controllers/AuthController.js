@@ -1,8 +1,8 @@
-const UserService = require("./UserService.js");
+const UserService = require("../service/UserService.js");
 const ApiError = require("../exceptions/ApiError.js");
 const { isEmail, isStrongPassword } = require("validator");
 
-class AuthService {
+class AuthController {
   async registration(req, res, next) {
     try {
       if (!isEmail(req.body.email)) {
@@ -48,21 +48,25 @@ class AuthService {
         httpOnly: true,
       });
       return res.json(userData);
-    } catch (e) {
-      next(e);
+    } catch (err) {
+      next(err);
     }
   }
 
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      const token = await UserService.logout(refreshToken, next);
       res.clearCookie("refreshToken");
-      return res.json(token);
+      if (refreshToken) {
+        const token = await UserService.logout(refreshToken, next);
+        return res.json(token?.refresh_token);
+      }
+      throw ApiError.BadRequest("refreshToken not define");
     } catch (e) {
       next(e);
     }
   }
+
   async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
@@ -78,4 +82,4 @@ class AuthService {
   }
 }
 
-module.exports = new AuthService();
+module.exports = new AuthController();

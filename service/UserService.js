@@ -2,15 +2,19 @@ const bcrypt = require("bcrypt");
 const tokenService = require("./TokenService.js");
 const UserDto = require("../dtos/UserDto.js");
 const ApiError = require("../exceptions/ApiError.js");
-const User = require("./../models/User.js");
-const Artist = require("./../models/Artist.js");
-const Token = require("./../models/Token.js");
+const { models } = require("../models/models-export.js");
 
+// noinspection JSCheckFunctionSignatures,JSUnusedLocalSymbols
 class UserService {
-  static async registration(email, password, isArtist, next) {
+  static async registration(email, password, isArtist) {
     try {
-      const candidate = await User.findOneByEmail(email);
-      if (candidate.length !== 0) {
+      // noinspection JSCheckFunctionSignatures
+      const candidate = await models.users.findOne({
+        where: {
+          email: email,
+        },
+      });
+      if (candidate) {
         throw ApiError.BadRequest(
           `Пользователь с почтовым адресом ${email} уже существует`
         );
@@ -18,53 +22,54 @@ class UserService {
       const hashPassword = await bcrypt.hash(password, 3);
       let newUser;
       if (isArtist) {
-        const user = new User({
+        newUser = await models.users.create({
           email: email,
           password: hashPassword,
+          role: "artist",
         });
-        newUser = await user.create();
-        const artist = new Artist({
-          fk_id_user: newUser[0].id_user,
+        const artist = await models.artists.create({
+          fk_id_user: newUser.id_user,
         });
-        await artist.create();
-        debugger;
       } else {
-        const user = new User({
+        newUser = await models.users.create({
           email: email,
           password: hashPassword,
           role: "admin_not_activated",
         });
-        newUser = await user.create();
       }
-      const userDto = new UserDto(newUser[0]);
+      const userDto = new UserDto(newUser);
       const tokens = tokenService.generateTokens({ ...userDto });
       await tokenService.saveToken(userDto.id_user, tokens.refreshToken);
       return { ...tokens, user: userDto };
     } catch (e) {
-      next(e);
+      throw e;
     }
   }
 
   static async login(email, password, next) {
     let user;
     try {
-      user = await User.findOneByEmail(email);
+      user = await models.users.findOne({
+        where: {
+          email: email,
+        },
+      });
     } catch (e) {
       next(e);
     }
 
-    if (user.length === 0) {
+    if (!user) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");
     }
-    const passswordCorrect = await bcrypt.compare(password, user[0].password);
+    const passswordCorrect = await bcrypt.compare(password, user.password);
     if (!passswordCorrect) {
       throw ApiError.BadRequest("Неверный пароль");
     }
 
     const userDto_ = new UserDto({
-      email: user[0].email,
-      id_user: user[0].id_user,
-      role: user[0].role,
+      email: user.email,
+      id_user: user.id_user,
+      role: user.role,
     });
     const tokens_ = tokenService.generateTokens({ ...userDto_ });
     await tokenService.saveToken(userDto_.id_user, tokens_.refreshToken);
@@ -77,35 +82,63 @@ class UserService {
   }
 
   static async refresh(refreshToken, next) {
-    if (!refreshToken) {
-      throw ApiError.UnauthorizedError();
-    }
-    const userData = tokenService.validateRefreshToken(refreshToken);
-
-    const tokenFromDatabase = await Token.findToken(refreshToken);
-    if (!userData || !tokenFromDatabase) {
-      throw ApiError.UnauthorizedError();
-    }
-    let user;
     try {
-      user = await User.findOneById(userData.id_user);
-      const userDto = new UserDto(user[0]);
+      if (!refreshToken) {
+        throw ApiError.UnauthorizedError();
+      }
+      const userData = tokenService.validateRefreshToken(refreshToken);
+
+      // noinspection JSCheckFunctionSignatures
+      const tokenFromDatabase = await models.tokens.findOne({
+        where: {
+          refresh_token: refreshToken,
+        },
+      });
+      if (!userData || !tokenFromDatabase) {
+        throw ApiError.UnauthorizedError();
+      }
+      let user;
+
+      user = await models.users.findOne({
+        where: {
+          id_user: userData.id_user,
+        },
+      });
+      const userDto = new UserDto(user);
       const tokens = tokenService.generateTokens({ ...userDto });
       await tokenService.saveToken(userDto.id_user, tokens.refreshToken, next);
       return { ...tokens, user: userDto };
     } catch (e) {
-      next(e);
+      throw e;
     }
   }
-  static async getUsers() {
-    return User.getAll();
+  static async getUsers(page, limit) {
+    function getPage(page, limitForPage) {
+      const offset = page * limitForPage - limitForPage;
+      return offset;
+    }
+    const offset = getPage(page, limit);
+    return models.users.findAndCountAll({
+      offset: offset,
+      limit: limit,
+      order: [["id_user", "ASC"]],
+    });
   }
 
   static async putUser(puttedUser) {
     try {
-      const user = new User(puttedUser);
-      await user.save();
-      return user;
+      const { id_user } = puttedUser;
+      delete puttedUser.id_user;
+      const user = await models.users.update(puttedUser, {
+        where: {
+          id_user: id_user,
+        },
+      });
+      if (user[0] === 1) {
+        return true;
+      } else {
+        throw ApiError.DatabaseError("No post has been updated");
+      }
     } catch (e) {
       throw e;
     }
