@@ -542,7 +542,7 @@
   debugger;
 })();*/
 
-(async () => {
+/*(async () => {
   const { models } = require("./models/models-export.js");
   let track = await models.tracks.findOne({
     where: {
@@ -555,5 +555,10 @@
   }
   track.dist_ids = [1, 2];
   await track.save();
+  debugger;
+})();*/
+(async () => {
+  const { models } = require("./models/models-export.js");
+  let tracks = await models.tracks.findAll();
   debugger;
 })();
