@@ -1,15 +1,18 @@
 .idea/
+<<<<<<< HEAD
 records/
 check.js
+=======
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
 *.sql
-
+check.js
 
 .env
 # Logs
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*yarn
+yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
