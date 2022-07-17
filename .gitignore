@@ -1,6 +1,6 @@
 .idea/
-#records/*.mp3
-#records/*.wav
+records/*.mp3
+records/*.wav
 check.js
 *.sql
 
