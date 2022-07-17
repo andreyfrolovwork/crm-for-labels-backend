@@ -1,5 +1,6 @@
 .idea/
-records/*
+records/*.mp3
+records/*.wav
 !records/stack
 check.js
 *.sql
