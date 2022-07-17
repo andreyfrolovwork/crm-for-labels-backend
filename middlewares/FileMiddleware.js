@@ -2,7 +2,7 @@ const multer = require("multer");
 const getRandom = require("../shared/getRandom.js");
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "records/stack/");
+    cb(null, "records/temp/");
   },
   filename(req, file, cb) {
     // Сохраняем загруженное изображение под случайным именем и записываем его в обьект req,

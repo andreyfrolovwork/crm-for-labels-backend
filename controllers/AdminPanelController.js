@@ -369,7 +369,7 @@ class AdminPanelController {
       const { id_user } = req.user;
       // rename file from stack
       const record_path = "records/" + req.body.id_track + "_" + req.fileSaveName.split(".")[0] + ".mp3";
-      await fs.rename("records/stack/" + req.fileSaveName, record_path).catch((e) => {
+      await fs.rename("records/temp/" + req.fileSaveName, record_path).catch((e) => {
         debugger;
         next(e);
       });
