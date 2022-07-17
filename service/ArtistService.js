@@ -1,7 +1,6 @@
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
 const _ = require("lodash");
-const getPage = require("../shared/getPage.js");
 
 class ArtistService {
   static async getAboutMe(id_user) {
@@ -12,6 +11,10 @@ class ArtistService {
     });
   }
   static async getArtists(page, limit) {
+    function getPage(page, limitForPage) {
+      const offset = page * limitForPage - limitForPage;
+      return offset;
+    }
     const offset = getPage(page, limit);
     return models.artists.findAndCountAll({
       offset: offset,
