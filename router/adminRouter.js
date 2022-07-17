@@ -3,7 +3,6 @@ const adminRouter = new Router();
 const AuthMiddleware = require("../middlewares/AuthMiddleware.js");
 const checkAdminRole = AuthMiddleware.checkAdminRole.bind(AuthMiddleware);
 const AdminPC = require("../controllers/AdminPanelController.js");
-const fileMiddleware = require("../middlewares/FileMiddleware.js");
 
 adminRouter.get("/get-artists", checkAdminRole, AdminPC.getArtists);
 adminRouter.post("/post-artist", checkAdminRole, AdminPC.getArtists);
@@ -17,12 +16,16 @@ adminRouter.post("/get-about-artist", checkAdminRole, AdminPC.getAboutArtist);
 /*post routes*/
 adminRouter.post("/post-act", checkAdminRole, AdminPC.postAct);
 adminRouter.post("/post-album", checkAdminRole, AdminPC.postAlbum);
-
+adminRouter.post("/post-track", checkAdminRole, AdminPC.postTracks);
 adminRouter.post("/post-release", checkAdminRole, AdminPC.postRelease);
 adminRouter.post("/post-videoclip", checkAdminRole, AdminPC.postVideoclip);
 
 <<<<<<< HEAD
+/*get routes*/
+=======
+<<<<<<< HEAD
 /*get routes for current artist*/
+>>>>>>> 48a56f9dd03e662447d2ac6bd666c3978c66f8f4
 adminRouter.get("/get-acts", checkAdminRole, AdminPC.getActs);
 =======
 /*get routes*/
@@ -33,14 +36,4 @@ adminRouter.post("/get-tracks", checkAdminRole, AdminPC.getTracks);
 adminRouter.post("/get-releases", checkAdminRole, AdminPC.getReleases);
 adminRouter.post("/get-videoclips", checkAdminRole, AdminPC.getVideoclips);
 
-// routes for entities
-adminRouter.post("/post-track", checkAdminRole, AdminPC.postTracks);
-adminRouter.get("/get-all-tracks", checkAdminRole, AdminPC.getAllTracks);
-adminRouter.delete("/delete-track", checkAdminRole, AdminPC.deleteTrack);
-adminRouter.put(
-  "/put-track",
-  checkAdminRole,
-  fileMiddleware.single("record"),
-  AdminPC.putTrack
-);
 module.exports = adminRouter;

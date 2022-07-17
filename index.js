@@ -1,8 +1,11 @@
 <<<<<<< HEAD
 require("module-alias/register");
-const { sequelize } = require("./models/models-export.js");
+const { sequelize } = require("Md/models-export.js");
 
 const PORT = process.env.APP_PORT;
+<<<<<<< HEAD
+const app = require("@/app.js");
+=======
 const app = require("./app.js");
 =======
 // noinspection JSCheckFunctionSignatures
@@ -37,15 +40,14 @@ app.use("/crm-api/artist", artistRouter);
 app.use(errorMiddleware);
 
 >>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
+>>>>>>> 48a56f9dd03e662447d2ac6bd666c3978c66f8f4
 const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
-    if (process.env.NODE_ENV !== "test") {
-      app.listen(PORT, () =>
-        console.log(`Server has been started on port: ${PORT}`)
-      );
-    }
+    app.listen(PORT, () =>
+      console.log(`Server has been started on port: ${PORT}`)
+    );
   } catch (e) {
     console.log(e);
   }
