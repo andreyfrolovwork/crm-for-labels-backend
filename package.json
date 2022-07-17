@@ -11,10 +11,17 @@
     "undo": "yarn sequelize db:migrate:undo",
     "cr-mig": "yarn sequelize migration:generate",
     "gen-models": "sequelize-auto -h 127.0.0.1 -d db_for_label -u postgres -p 5432 -o 'models' -x password -e postgres -l es6",
+<<<<<<< HEAD
+    "test": "jest  --detectOpenHandles --runInBand --forceExit"
+=======
     "test": "jest  --forceExit --watchAll --detectOpenHandles --verbose --coverage --maxWorkers=1"
 =======
     "gen-models": "sequelize-auto -h 127.0.0.1 -d db_for_label -u postgres -p 5432 -o 'models' -x password -e postgres -l es6"
 >>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
+<<<<<<< HEAD
+=======
+>>>>>>> 48a56f9dd03e662447d2ac6bd666c3978c66f8f4
+>>>>>>> e9305fda16a4caa1e9f17504be741152f1784b62
   },
   "keywords": [],
   "author": "",
@@ -28,7 +35,6 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
-    "multer": "^1.4.5-lts.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "postgres": "^3.2.4",
