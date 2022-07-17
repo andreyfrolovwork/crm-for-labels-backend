@@ -1,5 +1,8 @@
+<<<<<<< HEAD
+=======
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   return users.init(sequelize, DataTypes);

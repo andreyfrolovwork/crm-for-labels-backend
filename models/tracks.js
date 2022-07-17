@@ -1,6 +1,11 @@
+<<<<<<< HEAD
+const Sequelize = require("sequelize");
+const { DataTypes } = require("sequelize");
+=======
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
 const Sequelize = require("sequelize");
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
 module.exports = (sequelize, DataTypes) => {
   return tracks.init(sequelize, DataTypes);
 };
@@ -31,6 +36,8 @@ class tracks extends Sequelize.Model {
             key: "id_release",
           },
         },
+<<<<<<< HEAD
+=======
         fk_id_act: {
           type: DataTypes.INTEGER,
           allowNull: true,
@@ -39,6 +46,7 @@ class tracks extends Sequelize.Model {
             key: "id_act",
           },
         },
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
         fk_id_user: {
           type: DataTypes.INTEGER,
           allowNull: true,
@@ -76,6 +84,80 @@ class tracks extends Sequelize.Model {
           allowNull: true,
         },
         share_of_related_rights: {
+<<<<<<< HEAD
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        rao: {
+          type: DataTypes.ENUM("true", "false"),
+          allowNull: true,
+          defaultValue: "false",
+        },
+        voice: {
+          type: DataTypes.ENUM("true", "false"),
+          allowNull: true,
+          defaultValue: "false",
+        },
+        zaicev: {
+          type: DataTypes.ENUM("true", "false"),
+          allowNull: true,
+          defaultValue: "false",
+        },
+        mix_upload: {
+          type: DataTypes.ENUM("true", "false"),
+          allowNull: true,
+          defaultValue: "false",
+        },
+        PO: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        PO_number: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        UPC: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        ISRC: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        name: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        fk_id_act: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: "acts",
+            key: "id_act",
+          },
+        },
+        record_path: {
+          type: DataTypes.STRING,
+          defaultValue: null,
+        },
+        dist_ids: {
+          type: DataTypes.TEXT,
+          defaultValue: null,
+        },
+        /*dist_ids: {
+          type: DataTypes.JSON,
+          allowNull: false,
+          get() {
+            return JSON.parse(this.getDataValue("dist_ids"));
+          },
+          set(value) {
+            return this.setDataValue("dist_ids", JSON.stringify(value));
+          },
+        },*/
+        performers: {
+          type: DataTypes.STRING,
+          defaultValue: null,
+=======
           type: DataTypes.INTEGER,
           allowNull: true,
         },
@@ -98,6 +180,7 @@ class tracks extends Sequelize.Model {
           type: DataTypes.BOOLEAN,
           allowNull: true,
           defaultValue: false,
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
         },
       },
       {

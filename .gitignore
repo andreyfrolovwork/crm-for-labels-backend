@@ -1,4 +1,9 @@
 .idea/
+<<<<<<< HEAD
+records/
+check.js
+=======
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
 *.sql
 check.js
 

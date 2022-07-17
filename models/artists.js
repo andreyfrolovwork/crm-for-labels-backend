@@ -1,7 +1,11 @@
+<<<<<<< HEAD
+const Sequelize = require("sequelize");
+=======
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
 const Sequelize = require("sequelize");
 const { DataTypes } = require("sequelize");
+>>>>>>> 380db967db1bb68aa4a787f2f12600e87b034e33
 module.exports = (sequelize, DataTypes) => {
   return artists.init(sequelize, DataTypes);
 };
