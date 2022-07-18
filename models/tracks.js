@@ -118,7 +118,15 @@ class tracks extends Sequelize.Model {
             key: "id_act",
           },
         },
-        record_path: {
+        path_to_mp3: {
+          type: DataTypes.STRING,
+          defaultValue: null,
+        },
+        path_to_wav: {
+          type: DataTypes.STRING,
+          defaultValue: null,
+        },
+        path_to_cover: {
           type: DataTypes.STRING,
           defaultValue: null,
         },

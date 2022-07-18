@@ -4,6 +4,7 @@ const AuthMiddleware = require("../middlewares/AuthMiddleware.js");
 const checkAdminRole = AuthMiddleware.checkAdminRole.bind(AuthMiddleware);
 const AdminPC = require("../controllers/AdminPanelController.js");
 const fileMiddleware = require("../middlewares/FileMiddleware.js");
+const TrackController = require("../controllers/TrackController.js");
 
 adminRouter.get("/get-artists", checkAdminRole, AdminPC.getArtists);
 adminRouter.post("/post-artist", checkAdminRole, AdminPC.getArtists);
@@ -27,18 +28,32 @@ adminRouter.post("/post-videoclip", checkAdminRole, AdminPC.postVideoclip);
 /*get routes for current artist*/
 adminRouter.get("/get-acts", checkAdminRole, AdminPC.getActs);
 adminRouter.post("/get-albums", checkAdminRole, AdminPC.getAlbums);
-adminRouter.post("/get-tracks", checkAdminRole, AdminPC.getTracks);
+
 adminRouter.post("/get-releases", checkAdminRole, AdminPC.getReleases);
 adminRouter.post("/get-videoclips", checkAdminRole, AdminPC.getVideoclips);
 
 // routes for entities
-adminRouter.post("/post-track", checkAdminRole, AdminPC.postTracks);
-adminRouter.get("/get-all-tracks", checkAdminRole, AdminPC.getAllTracks);
-adminRouter.delete("/delete-track", checkAdminRole, AdminPC.deleteTrack);
-adminRouter.put(
+adminRouter.post("/get-tracks", checkAdminRole, TrackController.getTracks);
+adminRouter.post("/post-track", checkAdminRole, TrackController.postTracks);
+adminRouter.get("/get-all-tracks", checkAdminRole, TrackController.getAllTracks);
+adminRouter.delete("/delete-track", checkAdminRole, TrackController.deleteTrack);
+adminRouter.put("/put-track", checkAdminRole, fileMiddleware.any(), TrackController.putTrack);
+/*adminRouter.put(
   "/put-track",
   checkAdminRole,
-  fileMiddleware.single("record"),
-  AdminPC.putTrack
-);
+  fileMiddleware.fields([
+    {
+      name: "path_to_cover",
+      maxCount: 1,
+    },
+    {
+      name: "path_to_wav",
+      maxCount: 1,
+    },
+    {
+      name: "path_to_mp3",
+      maxCount: 1,
+    },
+  ]),
+  TrackController.putTrack*/
 module.exports = adminRouter;

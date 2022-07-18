@@ -558,7 +558,13 @@
   debugger;
 })();*/
 (async () => {
-  const { models } = require("./models/models-export.js");
+  const { v1: uuidv1 } = require("uuid");
+  console.log(uuidv1());
+  /*  console.log(uuid.v2());
+  console.log(uuid.v3());
+  console.log(uuid.v4());
+  console.log(uuid.v5());*/
+  /*  const { models } = require("./models/models-export.js");
   let tracks = await models.tracks.findAll();
-  debugger;
+  debugger;*/
 })();
