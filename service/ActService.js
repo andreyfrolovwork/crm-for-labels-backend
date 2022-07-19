@@ -55,7 +55,7 @@ class ActService {
           id_act: id_act,
         },
       });
-      if (act[0] === 1) {
+      if (act === 1) {
         return true;
       } else {
         throw ApiError.DatabaseError("No acts has been deleted");

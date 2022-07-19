@@ -557,14 +557,34 @@
   await track.save();
   debugger;
 })();*/
-(async () => {
+
+/*(async () => {
   const { v1: uuidv1 } = require("uuid");
   console.log(uuidv1());
-  /*  console.log(uuid.v2());
+  /!*  console.log(uuid.v2());
   console.log(uuid.v3());
   console.log(uuid.v4());
-  console.log(uuid.v5());*/
-  /*  const { models } = require("./models/models-export.js");
+  console.log(uuid.v5());*!/
+  /!*  const { models } = require("./models/models-export.js");
   let tracks = await models.tracks.findAll();
-  debugger;*/
+  debugger;*!/
+})();*/
+
+/*(async () => {
+  const valid = require("./shared/valid.js");
+  const isNumber = require("./shared/checkClass.js");
+  try {
+    valid([[isNumber, "4", {}, "Field id_act is not numeric"]]);
+  } catch (e) {
+    console.log(e);
+  }
+})();*/
+
+const { models } = require("./models/models-export.js");
+(async () => {
+  const { models } = require("./models/models-export.js");
+  let testActs = await models.acts.findOne({
+    order: [["id_act", "DESC"]],
+  });
+  debugger;
 })();

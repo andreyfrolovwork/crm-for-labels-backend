@@ -1,7 +1,10 @@
 .idea/
-records/*.mp3
-records/*.wav
 check.js
+storage/covers/*
+storage/mp3/*
+storage/wav/*
+
+
 *.sql
 
 
