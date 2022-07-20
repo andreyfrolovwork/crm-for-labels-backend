@@ -8,14 +8,8 @@ class ActController {
   static async getActs(req, res, next) {
     try {
       // eslint-disable-next-line prefer-const
-      let { page, limit, fk_id_artist_contract } = req.query;
-      if (!page) {
-        page = 1;
-      }
+      let { page = 1, limit = 10, fk_id_artist_contract } = req.query;
 
-      if (!limit) {
-        limit = 10;
-      }
       const acts = await ActServic.getActs({
         fk_id_artist_contract: fk_id_artist_contract,
         page: page,
