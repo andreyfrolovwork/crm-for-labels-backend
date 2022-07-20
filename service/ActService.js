@@ -11,15 +11,15 @@ class ActService {
       throw e;
     }
   }
-  static async getActs(props) {
+  static async getActs({ fk_id_artist_contract, limit, page }) {
     try {
-      const offset = getPage(props.page, props.limit);
+      const offset = getPage(page, limit);
       return models.acts.findAndCountAll({
         where: {
-          fk_id_artist_contract: props.fk_id_artist_contract,
+          fk_id_artist_contract: fk_id_artist_contract,
         },
         offset: offset,
-        limit: props.limit,
+        limit: limit,
         order: [["id_act", "ASC"]],
       });
     } catch (e) {

@@ -30,12 +30,12 @@ class AdminPanelController {
 
       const user = await UserService.putUser(
         {
-          id_user: id_user,
-          email: email,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          deleted: deleted,
-          role: role,
+          id_user,
+          email,
+          createdAt,
+          updatedAt,
+          deleted,
+          role,
         },
         next
       );
