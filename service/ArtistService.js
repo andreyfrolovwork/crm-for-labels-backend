@@ -1,10 +1,10 @@
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
 const _ = require("lodash");
+const getPage = require("../helpers/getPage.js");
 
 class ArtistService {
   static async getAboutMe(id_user) {
-    // noinspection JSCheckFunctionSignatures
     return models.artists.findOne({
       where: {
         fk_id_user: id_user,
@@ -12,10 +12,6 @@ class ArtistService {
     });
   }
   static async getArtists(page, limit) {
-    function getPage(page, limitForPage) {
-      const offset = page * limitForPage - limitForPage;
-      return offset;
-    }
     const offset = getPage(page, limit);
     return models.artists.findAndCountAll({
       offset: offset,
@@ -27,7 +23,7 @@ class ArtistService {
   static async putArtist(puttedArtist) {
     try {
       const { id_artist_contract } = puttedArtist;
-      let clearArtist = _.omitBy(puttedArtist, _.isUndefined);
+      const clearArtist = _.omitBy(puttedArtist, _.isUndefined);
       delete puttedArtist.fk_id_artist_contract;
       delete puttedArtist.fk_id_user;
       const artist = await models.artists.update(clearArtist, {

@@ -1,9 +1,13 @@
 .idea/
-test.js
-test2.js
-test3.js
-test4.js
+check.js
+storage/covers/*
+storage/mp3/*
+storage/wav/*
+
+
 *.sql
+
+
 .env
 # Logs
 logs
