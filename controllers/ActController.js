@@ -1,8 +1,8 @@
 const ActServic = require("../service/ActService.js");
-const valid = require("../shared/valid.js");
+const valid = require("../helpers/valid.js");
 const { isNumeric, isDate, isInt } = require("validator");
 const ActService = require("../service/ActService.js");
-const isNumber = require("../shared/checkClass.js");
+const isNumber = require("../helpers/checkClass.js");
 
 class ActController {
   static async getActs(req, res, next) {

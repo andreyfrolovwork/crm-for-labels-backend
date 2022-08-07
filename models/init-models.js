@@ -8,6 +8,7 @@ const _tokens = require("./tokens");
 const _tracks = require("./tracks");
 const _users = require("./users");
 const _videoclips = require("./videoclips");
+const _track_owners = require("./track_owners.js");
 
 function initModels(sequelize) {
   const SequelizeMeta = _SequelizeMeta(sequelize, DataTypes);
@@ -19,6 +20,7 @@ function initModels(sequelize) {
   const tracks = _tracks(sequelize, DataTypes);
   const users = _users(sequelize, DataTypes);
   const videoclips = _videoclips(sequelize, DataTypes);
+  const track_owners = _track_owners(sequelize, DataTypes);
 
   acts.belongsTo(users, {
     as: "fk_id_user_user",
@@ -251,6 +253,24 @@ function initModels(sequelize) {
     onDelete: "SET NULL",
   });
 
+  track_owners.belongsTo(artists, {
+    as: "fk_id_artist_contract_artist",
+    foreignKey: "fk_id_artist_contract",
+  });
+  artists.hasMany(track_owners, {
+    as: "track_owners",
+    foreignKey: "fk_id_artist_contract",
+  });
+
+  track_owners.belongsTo(tracks, {
+    as: "fk_id_track_track",
+    foreignKey: "fk_id_track",
+  });
+  tracks.hasMany(track_owners, {
+    as: "track_owners",
+    foreignKey: "fk_id_track",
+  });
+
   return {
     SequelizeMeta,
     acts,
@@ -261,6 +281,7 @@ function initModels(sequelize) {
     tracks,
     users,
     videoclips,
+    track_owners,
   };
 }
 
