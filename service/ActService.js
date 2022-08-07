@@ -1,5 +1,5 @@
 const { models } = require("../models/models-export.js");
-const getPage = require("../shared/getPage.js");
+const getPage = require("../helpers/getPage.js");
 const _ = require("lodash");
 const ApiError = require("../exceptions/ApiError.js");
 

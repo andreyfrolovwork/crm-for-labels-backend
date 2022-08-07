@@ -1,16 +1,16 @@
 const multer = require("multer");
-const getRandom = require("../shared/getRandom.js");
+const getRandom = require("../helpers/getRandom.js");
 const { v1: uuidv1 } = require("uuid");
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     if (file.fieldname === "path_to_mp3") {
-      cb(null, "storage/mp3/");
+      cb(null, process.env.FILE_MP3_PATH);
     }
     if (file.fieldname === "path_to_wav") {
-      cb(null, "storage/wav/");
+      cb(null, process.env.FILE_WAV_PATH);
     }
     if (file.fieldname === "path_to_cover") {
-      cb(null, "storage/covers/");
+      cb(null, process.env.FILE_COVER_PATH);
     }
   },
   filename(req, file, cb) {
