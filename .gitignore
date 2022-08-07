@@ -3,6 +3,7 @@ check.js
 storage/covers/*
 storage/mp3/*
 storage/wav/*
+config/config.json
 
 
 *.sql

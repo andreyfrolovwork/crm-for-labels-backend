@@ -1,5 +1,5 @@
 const { models } = require("../models/models-export.js");
-const getPage = require("../shared/getPage.js");
+const getPage = require("../helpers/getPage.js");
 const _ = require("lodash");
 const ApiError = require("../exceptions/ApiError.js");
 
@@ -11,6 +11,7 @@ class ActService {
       throw e;
     }
   }
+
   static async getActs({ page, limit, fk_id_artist_contract }) {
 
     try {
@@ -27,6 +28,7 @@ class ActService {
       throw e;
     }
   }
+
   static async putAct(puttedAct) {
     try {
       const { id_act } = puttedAct;
@@ -48,6 +50,7 @@ class ActService {
       throw e;
     }
   }
+
   static async deleteAct(deletedAct) {
     try {
       const { id_act } = deletedAct;

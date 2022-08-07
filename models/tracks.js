@@ -33,6 +33,10 @@ class tracks extends Sequelize.Model {
         fk_id_user: {
           type: DataTypes.INTEGER,
           allowNull: true,
+          references: {
+            model: "users",
+            key: "id_user",
+          },
         },
         fk_id_artist_contract: {
           type: DataTypes.INTEGER,
@@ -59,16 +63,45 @@ class tracks extends Sequelize.Model {
           allowNull: true,
         },
         date_of_registration: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
           allowNull: true,
+          defaultValue: Sequelize.Sequelize.fn("now"),
         },
         share_of_copyright: {
           type: DataTypes.INTEGER,
           allowNull: true,
         },
-        share_of_related_rights: {
-          type: DataTypes.STRING,
+        territory_of_rights: {
+          type: DataTypes.STRING(255),
           allowNull: true,
+        },
+        PO: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        PO_number: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        UPC: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        ISRC: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        track_name: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        fk_id_act: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: "acts",
+            key: "id_act",
+          },
         },
         rao: {
           type: DataTypes.ENUM("true", "false"),
@@ -90,63 +123,107 @@ class tracks extends Sequelize.Model {
           allowNull: true,
           defaultValue: "false",
         },
-        PO: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        PO_number: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        UPC: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        ISRC: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        name: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        fk_id_act: {
-          type: DataTypes.INTEGER,
-          allowNull: true,
-          references: {
-            model: "acts",
-            key: "id_act",
-          },
-        },
         path_to_mp3: {
-          type: DataTypes.STRING,
-          defaultValue: null,
-        },
-        path_to_wav: {
-          type: DataTypes.STRING,
-          defaultValue: null,
-        },
-        path_to_cover: {
-          type: DataTypes.STRING,
-          defaultValue: null,
+          type: DataTypes.STRING(255),
+          allowNull: true,
+          defaultValue: "NULL",
         },
         dist_ids: {
           type: DataTypes.TEXT,
-          defaultValue: null,
+          allowNull: true,
         },
-        /*dist_ids: {
-          type: DataTypes.JSON,
-          allowNull: false,
-          get() {
-            return JSON.parse(this.getDataValue("dist_ids"));
-          },
-          set(value) {
-            return this.setDataValue("dist_ids", JSON.stringify(value));
-          },
-        },*/
-        performers: {
-          type: DataTypes.STRING,
-          defaultValue: null,
+        performer: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+          defaultValue: "NULL",
+        },
+        path_to_wav: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        path_to_cover: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        code_po_release_album: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        release_name: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        release_version: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        release_date: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        sell_start_date: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        release_type: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        copyright_holder: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        genre: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        disk_number: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        track_number: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        track_version_subtitle: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        copyright_owner: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        copyright_owner_rate: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        owner_of_related_rights: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        owner_of_related_rights_rate: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        hide_track: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        meta_data: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        explicit_18: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        track_performer: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
+        },
+        copyright_organisation: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
         },
       },
       {
