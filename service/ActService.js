@@ -11,7 +11,8 @@ class ActService {
       throw e;
     }
   }
-  static async getActs({ fk_id_artist_contract, limit, page }) {
+  static async getActs({ page, limit, fk_id_artist_contract }) {
+
     try {
       const offset = getPage(page, limit);
       return models.acts.findAndCountAll({

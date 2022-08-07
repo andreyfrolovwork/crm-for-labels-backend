@@ -1,8 +1,8 @@
 const { models } = require("../models/models-export.js");
-const getPage = require("../shared/getPage.js");
+const getPage = require("../helpers/getPage.js");
 const ApiError = require("../exceptions/ApiError.js");
 const _ = require("lodash");
-const clearProp = require("../shared/clearProp.js");
+const clearProp = require("../helpers/clearProp.js");
 
 class TracksService {
   static async postTracks(track) {

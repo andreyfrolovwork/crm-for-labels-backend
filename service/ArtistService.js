@@ -1,7 +1,7 @@
 const { models } = require("../models/models-export.js");
 const ApiError = require("../exceptions/ApiError.js");
 const _ = require("lodash");
-const getPage = require("../shared/getPage.js");
+const getPage = require("../helpers/getPage.js");
 
 class ArtistService {
   static async getAboutMe(id_user) {
