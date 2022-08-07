@@ -16,11 +16,11 @@ module.exports = {
       allowNull: true,
     });
     await queryInterface.addColumn("tracks", "release_date", {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull: true,
     });
     await queryInterface.addColumn("tracks", "sell_start_date", {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull: true,
     });
     await queryInterface.addColumn("tracks", "release_type", {
