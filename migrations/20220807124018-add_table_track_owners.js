@@ -1,5 +1,5 @@
 "use strict";
-
+//1
 const { DataTypes } = require("sequelize");
 module.exports = {
   async up(queryInterface, Sequelize) {
