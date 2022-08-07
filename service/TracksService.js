@@ -52,7 +52,8 @@ class TracksService {
     try {
       const { id_track } = puttedAct;
       const trackRemoveNull = clearProp(puttedAct, "null");
-      const trackRemoveEmptyStr = clearProp(trackRemoveNull, "");
+      const trackRemoveInvalidDate = clearProp(trackRemoveNull, "Invalid date");
+      const trackRemoveEmptyStr = clearProp(trackRemoveInvalidDate, "");
       const clearTrack = _.omitBy(trackRemoveEmptyStr, _.isUndefined);
       delete clearTrack.fk_id_user;
       delete clearTrack.id_track;
